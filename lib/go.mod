@@ -1,4 +1,4 @@
-module github.com/nephio-project/nephio/krm-functions/lib
+module github.com/henderiw-nephio/krm-functions/lib
 
 go 1.20
 
