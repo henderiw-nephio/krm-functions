@@ -18,7 +18,7 @@ package v1alpha1
 
 import (
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
-	"github.com/nephio-project/nephio/krm-functions/lib/kubeobject"
+	"github.com/henderiw-nephio/krm-functions/lib/kubeobject"
 	ipamv1alpha1 "github.com/nokia/k8s-ipam/apis/alloc/ipam/v1alpha1"
 )
 

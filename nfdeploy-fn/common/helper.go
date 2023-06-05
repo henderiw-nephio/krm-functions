@@ -22,7 +22,7 @@ import (
 	infrav1alpha1 "github.com/nephio-project/api/infra/v1alpha1"
 	nephiodeployv1alpha1 "github.com/nephio-project/api/nf_deployments/v1alpha1"
 	nephioreqv1alpha1 "github.com/nephio-project/api/nf_requirements/v1alpha1"
-	kptcondsdk "github.com/nephio-project/nephio/krm-functions/lib/condkptsdk"
+	kptcondsdk "github.com/henderiw-nephio/krm-functions/lib/condkptsdk"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 

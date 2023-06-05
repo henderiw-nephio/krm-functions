@@ -90,6 +90,8 @@ github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+
 github.com/grpc-ecosystem/grpc-gateway v1.16.0/go.mod h1:BDjrQk3hbvj6Nolgz8mAMFbcEtjT1g+wF4CSlocrBnw=
 github.com/hansthienpondt/nipam v0.0.5 h1:83Mdwdgx3l9tvio8u8ufan97MWx49n38IJwgSBgATEc=
 github.com/hansthienpondt/nipam v0.0.5/go.mod h1:dJI5FdzV6iaQyaOH4htGqJNs6wGieJeX3lhPj1Ah19U=
+github.com/henderiw-nephio/krm-functions/lib v0.0.0-20230605064558-adba31de4fba h1:FavW1zd73GlepdkReXbKOD11Ls5zFkBG+MKzLk7xfoI=
+github.com/henderiw-nephio/krm-functions/lib v0.0.0-20230605064558-adba31de4fba/go.mod h1:4Gkkqsa6aLjB0FCXtEODcp3tEVWXNNMMiKtCCSh++iI=
 github.com/imdario/mergo v0.3.16 h1:wwQJbIsHYGMUyLSPrEq1CT16AhnhNJQ51+4fdHUnCl4=
 github.com/jessevdk/go-flags v1.4.0/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJSGM75WSRxI=
 github.com/josharian/intern v1.0.0 h1:vlS4z54oSdjm0bgjRigI+G1HpF+tI+9rE5LLzOg8HmY=

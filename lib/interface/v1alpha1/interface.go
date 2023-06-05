@@ -19,7 +19,7 @@ package v1alpha1
 import (
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
 	nephioreqv1alpha1 "github.com/nephio-project/api/nf_requirements/v1alpha1"
-	"github.com/nephio-project/nephio/krm-functions/lib/kubeobject"
+	"github.com/henderiw-nephio/krm-functions/lib/kubeobject"
 )
 
 type Interface struct {

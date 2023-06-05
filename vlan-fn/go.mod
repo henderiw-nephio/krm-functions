@@ -6,7 +6,7 @@ replace github.com/nephio-project/nephio/krm-functions/lib => ../lib
 
 require (
 	github.com/GoogleContainerTools/kpt-functions-sdk/go/fn v0.0.0-20230427202446-3255accc518d
-	github.com/nephio-project/nephio/krm-functions/lib v0.0.0-20230505152827-3d240775bc79
+	github.com/henderiw-nephio/krm-functions/lib v0.0.0-20230605064558-adba31de4fba
 	github.com/nokia/k8s-ipam v0.0.4-0.20230604044109-366c07a61afe
 	k8s.io/api v0.27.2
 )
@@ -44,6 +44,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
+	github.com/nephio-project/nephio/krm-functions/lib v0.0.0-20230505152827-3d240775bc79 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus/client_golang v1.15.1 // indirect
 	github.com/prometheus/client_model v0.4.0 // indirect

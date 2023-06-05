@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
 	nadv1 "github.com/k8snetworkplumbingwg/network-attachment-definition-client/pkg/apis/k8s.cni.cncf.io/v1"
-	"github.com/nephio-project/nephio/krm-functions/lib/kubeobject"
+	"github.com/henderiw-nephio/krm-functions/lib/kubeobject"
 )
 
 const (

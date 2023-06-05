@@ -1,0 +1,15 @@
+go 1.20
+
+use ./interface-fn
+
+use ./ipam-fn
+
+use ./vlan-fn
+
+use ./nad-fn
+
+use ./nfdeploy-fn
+
+use ./dnn-fn
+
+use ./lib

@@ -21,18 +21,16 @@ import (
 	"reflect"
 
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+	"github.com/henderiw-nephio/krm-functions/lib/condkptsdk"
+	ko "github.com/henderiw-nephio/krm-functions/lib/kubeobject"
 	nadv1 "github.com/k8snetworkplumbingwg/network-attachment-definition-client/pkg/apis/k8s.cni.cncf.io/v1"
 	infrav1alpha1 "github.com/nephio-project/api/infra/v1alpha1"
 	nephioreqv1alpha1 "github.com/nephio-project/api/nf_requirements/v1alpha1"
-	"github.com/henderiw-nephio/krm-functions/lib/condkptsdk"
-	ko "github.com/henderiw-nephio/krm-functions/lib/kubeobject"
 	allocv1alpha1 "github.com/nokia/k8s-ipam/apis/alloc/common/v1alpha1"
 	ipamv1alpha1 "github.com/nokia/k8s-ipam/apis/alloc/ipam/v1alpha1"
 	vlanv1alpha1 "github.com/nokia/k8s-ipam/apis/alloc/vlan/v1alpha1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
-	vlanlibv1alpha1 "github.com/nephio-project/nephio/krm-functions/lib/vlanalloc/v1alpha1"
 )
 
 const defaultPODNetwork = "default"
@@ -200,7 +198,7 @@ func (f *itfceFn) updateItfceResource(forObj *fn.KubeObject, objs fn.KubeObjects
 	vlanallocs := objs.Where(fn.IsGroupVersionKind(vlanv1alpha1.VLANAllocationGroupVersionKind))
 	for _, vlanalloc := range vlanallocs {
 		if vlanalloc.GetName() == forObj.GetName() {
-			alloc, err := vlanlibv1alpha1.NewFromKubeObject(vlanalloc)
+			alloc, err := ko.NewFromKubeObject[vlanv1alpha1.VLANAllocation](vlanalloc)
 			if err != nil {
 				return nil, err
 			}

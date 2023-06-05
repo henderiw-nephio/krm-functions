@@ -24,7 +24,7 @@ import (
 
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn/testhelpers"
-	testlib "github.com/nephio-project/nephio/krm-functions/lib/test"
+	testlib "github.com/henderiw-nephio/krm-functions/lib/test"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

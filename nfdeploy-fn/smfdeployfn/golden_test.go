@@ -18,7 +18,7 @@ package main
 
 import (
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
-	tst "github.com/nephio-project/nephio/krm-functions/lib/test"
+	tst "github.com/henderiw-nephio/krm-functions/lib/test"
 	"testing"
 )
 

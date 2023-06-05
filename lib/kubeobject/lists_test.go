@@ -19,7 +19,7 @@ package kubeobject
 import (
 	"testing"
 
-	tlib "github.com/nephio-project/nephio/krm-functions/lib/test"
+	tlib "github.com/henderiw-nephio/krm-functions/lib/test"
 	appsv1 "k8s.io/api/apps/v1"
 )
 

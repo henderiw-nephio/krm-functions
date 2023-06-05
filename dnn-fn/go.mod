@@ -6,8 +6,8 @@ replace github.com/nephio-project/nephio/krm-functions/lib => ../lib
 
 require (
 	github.com/GoogleContainerTools/kpt-functions-sdk/go/fn v0.0.0-20230427202446-3255accc518d
+	github.com/henderiw-nephio/krm-functions/lib v0.0.0-20230605064558-adba31de4fba
 	github.com/nephio-project/api v0.0.0-20230603150309-96ef6e574ad2
-	github.com/nephio-project/nephio/krm-functions/lib v0.0.0-20230512102733-a986c2cde4d1
 	github.com/nokia/k8s-ipam v0.0.4-0.20230604044109-366c07a61afe
 	k8s.io/api v0.27.2
 	k8s.io/apimachinery v0.27.2
@@ -39,6 +39,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
+	github.com/nephio-project/nephio/krm-functions/lib v0.0.0-20230512102733-a986c2cde4d1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/xlab/treeprint v1.2.0 // indirect
 	go4.org/netipx v0.0.0-20230303233057-f1b76eb4bb35 // indirect
