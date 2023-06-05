@@ -1,0 +1,6 @@
+github.com/nephio-project/nephio/krm-functions/dnn-fn/fn/function.go:36:	init				100.0%
+github.com/nephio-project/nephio/krm-functions/dnn-fn/fn/function.go:49:	Run				71.4%
+github.com/nephio-project/nephio/krm-functions/dnn-fn/fn/function.go:85:	WorkloadClusterCallbackFn	85.7%
+github.com/nephio-project/nephio/krm-functions/dnn-fn/fn/function.go:101:	desiredOwnedResourceList	84.6%
+github.com/nephio-project/nephio/krm-functions/dnn-fn/fn/function.go:145:	updateDnnResource		78.9%
+total:										(statements)			81.6%

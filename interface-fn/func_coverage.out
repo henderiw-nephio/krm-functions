@@ -1,0 +1,10 @@
+github.com/nephio-project/nephio/krm-functions/interface-fn/fn/function.go:45:	Run					71.4%
+github.com/nephio-project/nephio/krm-functions/interface-fn/fn/function.go:88:	WorkloadClusterCallbackFn		71.4%
+github.com/nephio-project/nephio/krm-functions/interface-fn/fn/function.go:105:	desiredOwnedResourceList		78.8%
+github.com/nephio-project/nephio/krm-functions/interface-fn/fn/function.go:173:	updateItfceResource			36.7%
+github.com/nephio-project/nephio/krm-functions/interface-fn/fn/function.go:219:	getVLANAllocation			100.0%
+github.com/nephio-project/nephio/krm-functions/interface-fn/fn/function.go:233:	getIPAllocation				100.0%
+github.com/nephio-project/nephio/krm-functions/interface-fn/fn/function.go:252:	getNAD					100.0%
+github.com/nephio-project/nephio/krm-functions/interface-fn/fn/function.go:260:	BuildNetworkAttachmentDefinition	100.0%
+github.com/nephio-project/nephio/krm-functions/interface-fn/fn/function.go:271:	IsCNITypePresent			100.0%
+total:										(statements)				65.9%

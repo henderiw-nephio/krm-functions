@@ -1,0 +1,7 @@
+github.com/nephio-project/nephio/krm-functions/nfdeploy-fn/amfdeployfn/main.go:27:	Run		100.0%
+github.com/nephio-project/nephio/krm-functions/nfdeploy-fn/amfdeployfn/main.go:31:	main		0.0%
+github.com/nephio-project/nephio/krm-functions/nfdeploy-fn/smfdeployfn/main.go:27:	Run		100.0%
+github.com/nephio-project/nephio/krm-functions/nfdeploy-fn/smfdeployfn/main.go:31:	main		0.0%
+github.com/nephio-project/nephio/krm-functions/nfdeploy-fn/upfdeployfn/main.go:26:	Run		100.0%
+github.com/nephio-project/nephio/krm-functions/nfdeploy-fn/upfdeployfn/main.go:30:	main		0.0%
+total:											(statements)	25.0%

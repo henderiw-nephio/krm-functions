@@ -1,0 +1,5 @@
+github.com/nephio-project/nephio/krm-functions/nad-fn/fn/function.go:45:	Run				71.4%
+github.com/nephio-project/nephio/krm-functions/nad-fn/fn/function.go:86:	WorkloadClusterCallbackFn	71.4%
+github.com/nephio-project/nephio/krm-functions/nad-fn/fn/function.go:101:	updateResourceFn		82.4%
+github.com/nephio-project/nephio/krm-functions/nad-fn/fn/function.go:195:	IsCNITypePresent		100.0%
+total:										(statements)			81.2%

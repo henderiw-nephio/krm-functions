@@ -1,0 +1,3278 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>condkptsdk: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/nephio-project/nephio/krm-functions/lib/condkptsdk/inventory.go (65.7%)</option>
+				
+				<option value="file1">github.com/nephio-project/nephio/krm-functions/lib/condkptsdk/inventory_diff.go (59.7%)</option>
+				
+				<option value="file2">github.com/nephio-project/nephio/krm-functions/lib/condkptsdk/inventory_ready.go (35.5%)</option>
+				
+				<option value="file3">github.com/nephio-project/nephio/krm-functions/lib/condkptsdk/inventory_resources.go (91.7%)</option>
+				
+				<option value="file4">github.com/nephio-project/nephio/krm-functions/lib/condkptsdk/sdk.go (13.2%)</option>
+				
+				<option value="file5">github.com/nephio-project/nephio/krm-functions/lib/condkptsdk/sdk_list_inventory.go (0.0%)</option>
+				
+				<option value="file6">github.com/nephio-project/nephio/krm-functions/lib/condkptsdk/sdk_populate_inventory.go (0.0%)</option>
+				
+				<option value="file7">github.com/nephio-project/nephio/krm-functions/lib/condkptsdk/sdk_stage1.go (0.0%)</option>
+				
+				<option value="file8">github.com/nephio-project/nephio/krm-functions/lib/condkptsdk/sdk_stage2.go (0.0%)</option>
+				
+				<option value="file9">github.com/nephio-project/nephio/krm-functions/lib/condkptsdk/sdk_updates.go (0.0%)</option>
+				
+				<option value="file10">github.com/nephio-project/nephio/krm-functions/lib/condkptsdk/sdk_watches.go (0.0%)</option>
+				
+				<option value="file11">github.com/nephio-project/nephio/krm-functions/lib/condkptsdk/utils.go (100.0%)</option>
+				
+				<option value="file12">github.com/nephio-project/nephio/krm-functions/lib/interface/v1alpha1/interface.go (71.4%)</option>
+				
+				<option value="file13">github.com/nephio-project/nephio/krm-functions/lib/ipalloc/v1alpha1/ipalloc.go (71.4%)</option>
+				
+				<option value="file14">github.com/nephio-project/nephio/krm-functions/lib/kptfile/v1/condition.go (60.0%)</option>
+				
+				<option value="file15">github.com/nephio-project/nephio/krm-functions/lib/kptfile/v1/kpt.go (90.9%)</option>
+				
+				<option value="file16">github.com/nephio-project/nephio/krm-functions/lib/kptrl/kptrl.go (86.1%)</option>
+				
+				<option value="file17">github.com/nephio-project/nephio/krm-functions/lib/kubeobject/kubeobject.go (75.5%)</option>
+				
+				<option value="file18">github.com/nephio-project/nephio/krm-functions/lib/kubeobject/lists.go (87.0%)</option>
+				
+				<option value="file19">github.com/nephio-project/nephio/krm-functions/lib/nad/v1/nad.go (80.5%)</option>
+				
+				<option value="file20">github.com/nephio-project/nephio/krm-functions/lib/vlanalloc/v1alpha1/vlanalloc.go (71.4%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">/*
+Copyright 2023 The Nephio Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package condkptsdk
+
+import (
+        "fmt"
+        "sync"
+
+        corev1 "k8s.io/api/core/v1"
+)
+
+type inventory interface {
+        // initializeGVKInventory initializes the GVK with the generic GVK
+        // resources as specified in the SDKConfig
+        // used to provide faster loopup if the GVK is relevant for the fn/controller
+        // and to provide context if there is a match
+        initializeGVKInventory(cfg *Config) error
+        addGVKObjectReference(kc *gvkKindCtx, ref corev1.ObjectReference) error
+        isGVKMatch(ref *corev1.ObjectReference) (*gvkKindCtx, bool)
+        // runtime crud operations on the inventory
+        set(kc *gvkKindCtx, refs []corev1.ObjectReference, x any, new newResource) error
+        delete(kc *gvkKindCtx, refs []corev1.ObjectReference) error
+        get(k gvkKind, refs []corev1.ObjectReference) map[corev1.ObjectReference]*resourceCtx
+        list() [][]sdkObjectReference
+        // readiness
+        isReady() bool
+        getReadyMap() map[corev1.ObjectReference]*readyCtx
+        // diff
+        diff() (map[corev1.ObjectReference]*inventoryDiff, error)
+}
+
+func newInventory(cfg *Config) (inventory, error) <span class="cov8" title="1">{
+        r := &amp;inv{
+                gvkResources: map[corev1.ObjectReference]*gvkKindCtx{},
+                resources: &amp;resources{
+                        resources: map[sdkObjectReference]*resources{},
+                },
+        }
+        if err := r.initializeGVKInventory(cfg); err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return r, nil</span>
+}
+
+type inv struct {
+        m sync.RWMutex
+        //hasOwn bool
+        // gvkResource contain the gvk based resource from config
+        // they dont contain the names but allow for faster lookups
+        // when walking the resource list or condition list
+        gvkResources map[corev1.ObjectReference]*gvkKindCtx
+        // resources contain the runtime resources collected and updated
+        // during the execution
+        resources *resources
+}
+
+type action string
+
+const (
+        actionCreate action = "create"
+        actionDelete action = "delete"
+        actionUpdate action = "update"
+        actionGet    action = "get"
+)
+
+// initializeGVKInventory initializes the GVK with the generic GVK
+// resources as specified in the SDKConfig
+// used to provide faster lookup if the GVK is relevant for the fn/controller
+// and to provide context if there is a match
+func (r *inv) initializeGVKInventory(cfg *Config) error <span class="cov8" title="1">{
+        if err := validateGVKRef(cfg.For); err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+        <span class="cov8" title="1">if err := r.addGVKObjectReference(&amp;gvkKindCtx{gvkKind: forGVKKind}, cfg.For); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">for ref, ok := range cfg.Owns </span><span class="cov8" title="1">{
+                if err := validateGVKRef(ref); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">if err := r.addGVKObjectReference(&amp;gvkKindCtx{gvkKind: ownGVKKind, ownKind: ok}, ref); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+        }
+        <span class="cov8" title="1">for ref, cb := range cfg.Watch </span><span class="cov8" title="1">{
+                if err := validateGVKRef(ref); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">if err := r.addGVKObjectReference(&amp;gvkKindCtx{gvkKind: watchGVKKind, callbackFn: cb}, ref); err != nil </span><span class="cov8" title="1">{
+                        return err
+                }</span>
+        }
+        <span class="cov8" title="1">if cfg.UpdateResourceFn == nil </span><span class="cov8" title="1">{
+                return fmt.Errorf("a function always needs a GenerateResource function")
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+
+func (r *inv) addGVKObjectReference(kc *gvkKindCtx, ref corev1.ObjectReference) error <span class="cov8" title="1">{
+        r.m.Lock()
+        defer r.m.Unlock()
+
+        // validates if we GVK(s) were added to the same context
+        if resCtx, ok := r.gvkResources[corev1.ObjectReference{APIVersion: ref.APIVersion, Kind: ref.Kind}]; ok </span><span class="cov8" title="1">{
+                return fmt.Errorf("another resource with a different kind %s already exists", resCtx.gvkKind)
+        }</span>
+        <span class="cov8" title="1">r.gvkResources[corev1.ObjectReference{APIVersion: ref.APIVersion, Kind: ref.Kind}] = kc
+        return nil</span>
+}
+
+func (r *inv) isGVKMatch(ref *corev1.ObjectReference) (*gvkKindCtx, bool) <span class="cov0" title="0">{
+        r.m.RLock()
+        defer r.m.RUnlock()
+        if ref == nil </span><span class="cov0" title="0">{
+                return nil, false
+        }</span>
+        <span class="cov0" title="0">kindCtx, ok := r.gvkResources[corev1.ObjectReference{APIVersion: ref.APIVersion, Kind: ref.Kind}]
+        if !ok </span><span class="cov0" title="0">{
+                return nil, false
+        }</span>
+        <span class="cov0" title="0">return kindCtx, true</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">/*
+Copyright 2023 The Nephio Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package condkptsdk
+
+import (
+        "fmt"
+
+        "github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+        v1 "github.com/GoogleContainerTools/kpt/pkg/api/kptfile/v1"
+        "github.com/google/go-cmp/cmp"
+        corev1 "k8s.io/api/core/v1"
+)
+
+type inventoryDiff struct {
+        deleteForCondition      bool
+        updateForCondition      bool
+        deleteObjs              []object
+        updateObjs              []object
+        createObjs              []object
+        deleteConditions        []object
+        createConditions        []object
+        createTrueConditions    []object // used for resources that do not have to be acted upon
+        createInitialConditions []object // used for resources that are owned by a for resource
+        //updateConditions []*object
+        updateDeleteAnnotations []object
+}
+
+type object struct {
+        ref     corev1.ObjectReference
+        obj     fn.KubeObject
+        ownKind ResourceKind
+}
+
+// Diff is based on the following principle: we have an inventory
+// populated with the existing resource/condition info and we also
+// have information on new resource/condition that would be created
+// if nothing existed.
+// the diff compares the eixisiting resource/condition inventory
+// against the new resource/condition inventory and provide CRUD operation
+// based on that comparisons.
+func (r *inv) diff() (map[corev1.ObjectReference]*inventoryDiff, error) <span class="cov8" title="1">{
+        r.m.RLock()
+        defer r.m.RUnlock()
+        diffMap := map[corev1.ObjectReference]*inventoryDiff{}
+
+        for forRef, forResCtx := range r.get(forGVKKind, []corev1.ObjectReference{{}}) </span><span class="cov8" title="1">{
+                diffMap[forRef] = &amp;inventoryDiff{
+                        deleteObjs:              []object{},
+                        updateObjs:              []object{},
+                        createObjs:              []object{},
+                        deleteConditions:        []object{},
+                        createConditions:        []object{},
+                        createInitialConditions: []object{},
+                        createTrueConditions:    []object{},
+                        updateDeleteAnnotations: []object{},
+                }
+                // if the existing for resource is not present we need to cleanup
+                // all child resources and conditions
+                //fn.Logf("diff: forRef: %v, existingResource: %v\n", forRef, resCtx.existingResource)
+                if forResCtx.existingResource == nil </span><span class="cov0" title="0">{
+                        for ref, resCtx := range r.get(ownGVKKind, []corev1.ObjectReference{forRef, {}}) </span><span class="cov0" title="0">{
+                                fn.Logf("delete resource and conditions: forRef: %v, ownRef: %v\n", forRef, ref)
+                                diffMap[forRef].deleteForCondition = true
+                                if resCtx.existingCondition != nil </span><span class="cov0" title="0">{
+                                        diffMap[forRef].deleteConditions = append(diffMap[forRef].deleteConditions, object{ref: ref, ownKind: resCtx.ownKind})
+                                }</span>
+                                <span class="cov0" title="0">if resCtx.existingResource != nil </span><span class="cov0" title="0">{
+                                        diffMap[forRef].deleteObjs = append(diffMap[forRef].deleteObjs, object{ref: ref, obj: *resCtx.existingResource, ownKind: resCtx.ownKind})
+                                }</span>
+                        }
+                } else<span class="cov8" title="1"> {
+                        for ownRef, resCtx := range r.get(ownGVKKind, []corev1.ObjectReference{forRef, {}}) </span><span class="cov8" title="1">{
+                                fn.Logf("diff: forRef: %v, ownRef: %v, existingResource: %v, newResource: %v\n", forRef, ownRef, resCtx.existingResource, resCtx.newResource)
+                                // condition diff handling
+                                switch </span>{
+                                // if there is no new resource  and no existing condition, but this is an initial Child resource we need to create the conditions
+                                // e.g. Interface within UPFDeployment
+                                case resCtx.newResource == nil &amp;&amp; resCtx.existingCondition == nil &amp;&amp; resCtx.ownKind == ChildInitial:<span class="cov0" title="0">
+                                        if forResCtx.existingCondition == nil || (forResCtx.existingCondition != nil &amp;&amp; forResCtx.existingCondition.Status != v1.ConditionFalse) </span><span class="cov0" title="0">{
+                                                diffMap[forRef].updateForCondition = true
+                                        }</span>
+                                        <span class="cov0" title="0">diffMap[forRef].createInitialConditions = append(diffMap[forRef].createInitialConditions, object{ref: ownRef, ownKind: resCtx.ownKind})</span>
+                                // e.g. Capacity within UPFDeployment
+                                case resCtx.newResource == nil &amp;&amp; resCtx.existingCondition == nil &amp;&amp; resCtx.ownKind == ChildLocal:<span class="cov0" title="0">
+                                        if forResCtx.existingCondition == nil || (forResCtx.existingCondition != nil &amp;&amp; forResCtx.existingCondition.Status != v1.ConditionFalse) </span><span class="cov0" title="0">{
+                                                diffMap[forRef].updateForCondition = true
+                                        }</span>
+                                        <span class="cov0" title="0">diffMap[forRef].createTrueConditions = append(diffMap[forRef].createTrueConditions, object{ref: ownRef, ownKind: resCtx.ownKind})</span>
+                                case resCtx.newResource == nil &amp;&amp; resCtx.existingCondition == nil:<span class="cov8" title="1">
+                                        if forResCtx.existingCondition == nil || (forResCtx.existingCondition != nil &amp;&amp; forResCtx.existingCondition.Status != v1.ConditionFalse) </span><span class="cov8" title="1">{
+                                                diffMap[forRef].updateForCondition = true
+                                        }</span>
+                                        <span class="cov8" title="1">diffMap[forRef].createConditions = append(diffMap[forRef].createConditions, object{ref: ownRef, ownKind: resCtx.ownKind})</span>
+                                // if there is no new resource, but we have a condition for that resource we should delete the condition
+                                // if the ownKind is not ChildInitial || ChildLocal -&gt; this would happen in stage 2 of upf deployment
+                                case resCtx.newResource == nil &amp;&amp; resCtx.existingCondition != nil:<span class="cov0" title="0">
+                                        if forResCtx.existingCondition == nil || (forResCtx.existingCondition != nil &amp;&amp; forResCtx.existingCondition.Status != v1.ConditionFalse) </span><span class="cov0" title="0">{
+                                                diffMap[forRef].updateForCondition = true
+                                        }</span>
+                                        <span class="cov0" title="0">if resCtx.ownKind != ChildInitial &amp;&amp; resCtx.ownKind != ChildLocal </span><span class="cov0" title="0">{
+
+                                                diffMap[forRef].deleteConditions = append(diffMap[forRef].deleteConditions, object{ref: ownRef, ownKind: resCtx.ownKind})
+                                        }</span>
+                                // if there is a new resource, but we have no condition for that resource someone deleted it
+                                // and we have to recreate that condition
+                                case resCtx.newResource != nil &amp;&amp; resCtx.existingCondition == nil:<span class="cov8" title="1">
+                                        if forResCtx.existingCondition == nil || (forResCtx.existingCondition != nil &amp;&amp; forResCtx.existingCondition.Status != v1.ConditionFalse) </span><span class="cov8" title="1">{
+                                                diffMap[forRef].updateForCondition = true
+                                        }</span>
+                                        <span class="cov8" title="1">diffMap[forRef].createConditions = append(diffMap[forRef].createConditions, object{ref: ownRef, obj: *resCtx.newResource, ownKind: resCtx.ownKind})</span>
+                                }
+
+                                // resource diff handling
+                                <span class="cov8" title="1">switch </span>{
+                                // if the existing resource does not exist but the new resource exist we have to create the new resource
+                                case resCtx.existingResource == nil &amp;&amp; resCtx.newResource != nil:<span class="cov8" title="1">
+                                        // create resource
+                                        if forResCtx.existingCondition == nil || (forResCtx.existingCondition != nil &amp;&amp; forResCtx.existingCondition.Status != v1.ConditionFalse) </span><span class="cov8" title="1">{
+                                                diffMap[forRef].updateForCondition = true
+                                        }</span>
+                                        <span class="cov8" title="1">diffMap[forRef].createObjs = append(diffMap[forRef].createObjs, object{ref: ownRef, obj: *resCtx.newResource, ownKind: resCtx.ownKind})</span>
+                                // if the new resource does not exist and but the resource exist we have to delete the exisiting resource
+                                case resCtx.existingResource != nil &amp;&amp; resCtx.newResource == nil:<span class="cov8" title="1">
+                                        // delete resource
+                                        if forResCtx.existingCondition == nil || (forResCtx.existingCondition != nil &amp;&amp; forResCtx.existingCondition.Status != v1.ConditionFalse) </span><span class="cov8" title="1">{
+                                                diffMap[forRef].updateForCondition = true
+                                        }</span>
+                                        <span class="cov8" title="1">if resCtx.ownKind != ChildInitial &amp;&amp; resCtx.ownKind != ChildLocal </span><span class="cov8" title="1">{
+                                                diffMap[forRef].deleteObjs = append(diffMap[forRef].deleteObjs, object{ref: ownRef, obj: *resCtx.existingResource, ownKind: resCtx.ownKind})
+                                        }</span>
+                                // if both exisiting/new resource exists check the differences of the spec
+                                // dependening on the outcome update the resource with the new information
+                                case resCtx.existingResource != nil &amp;&amp; resCtx.newResource != nil:<span class="cov8" title="1">
+                                        // for childremote consition a diff is not needed since the object
+                                        // is created remotely
+                                        if resCtx.ownKind != ChildRemoteCondition </span><span class="cov8" title="1">{
+                                                // check diff
+                                                existingSpec, err := getSpec(resCtx.existingResource)
+                                                if err != nil </span><span class="cov0" title="0">{
+                                                        fn.Logf("cannot get spec from exisiting obj, err: %v\n", err)
+                                                        continue</span>
+                                                }
+                                                <span class="cov8" title="1">newSpec, err := getSpec(resCtx.newResource)
+                                                if err != nil </span><span class="cov0" title="0">{
+                                                        fn.Logf("cannot get spec from exisiting obj, err: %v\n", err)
+                                                        continue</span>
+                                                }
+
+                                                <span class="cov8" title="1">if d := cmp.Diff(existingSpec, newSpec); d != "" </span><span class="cov8" title="1">{
+                                                        if forResCtx.existingCondition == nil || (forResCtx.existingCondition != nil &amp;&amp; forResCtx.existingCondition.Status != v1.ConditionFalse) </span><span class="cov8" title="1">{
+                                                                diffMap[forRef].updateForCondition = true
+                                                        }</span>
+                                                        <span class="cov8" title="1">diffMap[forRef].updateObjs = append(diffMap[forRef].updateObjs, object{ref: ownRef, obj: *resCtx.newResource, ownKind: resCtx.ownKind})</span>
+                                                }
+                                                // this is a corner case, in case for object gets deleted and recreated
+                                                // if the delete annotation is set, we need to cleanup the
+                                                // delete annotation and set the condition to update
+                                                <span class="cov8" title="1">a := resCtx.existingResource.GetAnnotations()
+                                                if _, ok := a[SpecializerDelete]; ok </span><span class="cov0" title="0">{
+                                                        //fn.Logf("delete annotation: %v\n", a)
+                                                        if _, ok := a[SpecializerDelete]; ok </span><span class="cov0" title="0">{
+                                                                if forResCtx.existingCondition.Status != v1.ConditionFalse </span><span class="cov0" title="0">{
+                                                                        diffMap[forRef].updateForCondition = true
+                                                                }</span>
+                                                                <span class="cov0" title="0">diffMap[forRef].updateDeleteAnnotations = append(diffMap[forRef].updateDeleteAnnotations, object{ref: ownRef, obj: *resCtx.newResource, ownKind: resCtx.ownKind})</span>
+                                                        }
+                                                }
+                                        }
+                                }
+                        }
+                }
+        }
+        <span class="cov8" title="1">return diffMap, nil</span>
+}
+
+func getSpec(o *fn.KubeObject) (map[string]any, error) <span class="cov8" title="1">{
+        spec := &amp;map[string]any{}
+        ok, err := o.NestedResource(spec, "spec")
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("cannot get spec from obj, err %v", err)
+        }</span>
+        <span class="cov8" title="1">if !ok </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("cannot get spec from obj, not found")
+        }</span>
+        <span class="cov8" title="1">return *spec, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">/*
+Copyright 2023 The Nephio Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package condkptsdk
+
+import (
+        "github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+        kptv1 "github.com/GoogleContainerTools/kpt/pkg/api/kptfile/v1"
+        kptfilelibv1 "github.com/nephio-project/nephio/krm-functions/lib/kptfile/v1"
+        corev1 "k8s.io/api/core/v1"
+)
+
+type readyCtx struct {
+        ready        bool
+        forObj       *fn.KubeObject
+        forCondition *kptv1.Condition
+        owns         map[corev1.ObjectReference]fn.KubeObject
+        watches      map[corev1.ObjectReference]fn.KubeObject
+}
+
+// isReady provide the overall ready status by validating the global
+// watch resource. Used in stage1 and stage2
+// if the global watched resource(s) dont exist we are not ready
+// if the global watched resource(s) have a False condition status we are not ready
+func (r *inv) isReady() bool <span class="cov8" title="1">{
+        r.m.RLock()
+        defer r.m.RUnlock()
+        // check readiness, we start positive
+        ready := true
+        // the readiness is determined by the global watch resources
+        for watchRef, resCtx := range r.get(watchGVKKind, []corev1.ObjectReference{{}}) </span><span class="cov8" title="1">{
+                fn.Logf("isReady: watchRef: %v, resCtx: %#v\n", watchRef, *resCtx)
+                if resCtx.existingCondition != nil </span><span class="cov8" title="1">{
+                        fn.Logf("isReady: watchRef: %v, condition: %#v\n", watchRef, resCtx.existingCondition)
+                }</span>
+                // if global watched resource does not exist we fail readiness
+                // if the condition is present and the status is False something is pending, so we
+                // fail readiness
+                <span class="cov8" title="1">if resCtx.existingResource == nil </span><span class="cov8" title="1">{
+                        return false
+                }</span> else<span class="cov8" title="1"> {
+                        if resCtx.existingCondition != nil &amp;&amp;
+                                resCtx.existingCondition.Status == kptv1.ConditionFalse </span><span class="cov0" title="0">{
+                                return false
+                        }</span>
+                }
+        }
+        <span class="cov8" title="1">return ready</span>
+}
+
+// getReadyMap provides a readyMap based on the information of the children
+// of the forResource
+// Both own and watches that are dependent on the forResource are validated for
+// readiness
+// The readyMap is used only in stage 2 of the sdk
+func (r *inv) getReadyMap() map[corev1.ObjectReference]*readyCtx <span class="cov0" title="0">{
+        r.m.RLock()
+        defer r.m.RUnlock()
+
+        readyMap := map[corev1.ObjectReference]*readyCtx{}
+        for forRef, forResCtx := range r.get(forGVKKind, []corev1.ObjectReference{{}}) </span><span class="cov0" title="0">{
+                readyMap[forRef] = &amp;readyCtx{
+                        ready:        true,
+                        owns:         map[corev1.ObjectReference]fn.KubeObject{},
+                        watches:      map[corev1.ObjectReference]fn.KubeObject{},
+                        forObj:       forResCtx.existingResource,
+                        forCondition: forResCtx.existingCondition,
+                }
+                for ref, resCtx := range r.get(ownGVKKind, []corev1.ObjectReference{forRef, {}}) </span><span class="cov0" title="0">{
+                        fn.Logf("getReadyMap: own ref: %v, resCtx condition %v\n", ref, resCtx.existingCondition)
+                        if resCtx.existingCondition == nil ||
+                                resCtx.existingCondition.Status == kptv1.ConditionFalse </span><span class="cov0" title="0">{
+                                readyMap[forRef].ready = false
+                        }</span>
+                        <span class="cov0" title="0">if resCtx.existingResource != nil </span><span class="cov0" title="0">{
+                                readyMap[forRef].owns[ref] = *resCtx.existingResource
+                        }</span>
+                }
+                <span class="cov0" title="0">for ref, resCtx := range r.get(watchGVKKind, []corev1.ObjectReference{forRef, {}}) </span><span class="cov0" title="0">{
+                        // TBD we need to look at some watches that we want to check the condition for and others not
+                        fn.Logf("getReadyMap: watch ref: %v, resCtx condition %v\n", ref, resCtx.existingCondition)
+                        if resCtx.existingCondition == nil || resCtx.existingCondition.Status == kptv1.ConditionFalse </span><span class="cov0" title="0">{
+                                // ignore validating consition if the the owner reference is equal to the watch resource
+                                // e.g. interface watch in case of nad forFilter
+                                if kptfilelibv1.GetConditionType(&amp;ref) != forResCtx.existingCondition.Reason </span><span class="cov0" title="0">{
+                                        readyMap[forRef].ready = false
+                                }</span>
+                        }
+                        <span class="cov0" title="0">if resCtx.existingResource != nil </span><span class="cov0" title="0">{
+                                readyMap[forRef].watches[ref] = *resCtx.existingResource
+                        }</span>
+                }
+        }
+        <span class="cov0" title="0">return readyMap</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">/*
+Copyright 2023 The Nephio Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package condkptsdk
+
+import (
+        "fmt"
+
+        "github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+        kptv1 "github.com/GoogleContainerTools/kpt/pkg/api/kptfile/v1"
+        "github.com/google/go-cmp/cmp"
+        corev1 "k8s.io/api/core/v1"
+)
+
+// defines the kind of gvks supported by the inventory
+type gvkKind string
+
+const (
+        forGVKKind   gvkKind = "for"
+        ownGVKKind   gvkKind = "own"
+        watchGVKKind gvkKind = "watch"
+)
+
+// to make the resource list of the inventory geenric we add the gvkKind on top of the objectReference
+type sdkObjectReference struct {
+        gvkKind gvkKind
+        ref     corev1.ObjectReference
+}
+
+type gvkKindCtx struct {
+        gvkKind    gvkKind
+        ownKind    ResourceKind    // only used for kind == own
+        callbackFn WatchCallbackFn // only used for global watches
+}
+
+type resourceCtx struct {
+        gvkKindCtx
+        existingCondition *kptv1.Condition // contains owner in the condition reason
+        existingResource  *fn.KubeObject   // contains the owner in the owner annotation
+        newResource       *fn.KubeObject
+}
+
+type newResource bool
+
+type resources struct {
+        resourceCtx
+        resources map[sdkObjectReference]*resources
+}
+
+func (r *inv) set(kc *gvkKindCtx, refs []corev1.ObjectReference, x any, new newResource) error <span class="cov8" title="1">{
+        r.m.Lock()
+        defer r.m.Unlock()
+
+        //fn.Logf("set: kc: %v, refs: %v, resource: %v, new: %t\n", kc, refs, x, new)
+        sdkRefs, err := getSdkRefs(kc.gvkKind, refs)
+        if err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+        <span class="cov8" title="1">return r.resources.set(sdkRefs, kc, x, new)</span>
+}
+
+func (r *inv) delete(kc *gvkKindCtx, refs []corev1.ObjectReference) error <span class="cov8" title="1">{
+        r.m.Lock()
+        defer r.m.Unlock()
+
+        //fn.Logf("delete: kc: %v, refs: %v\n", kc, refs)
+        sdkRefs, err := getSdkRefs(kc.gvkKind, refs)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">return r.resources.delete(sdkRefs)</span>
+}
+
+func (r *inv) get(k gvkKind, refs []corev1.ObjectReference) map[corev1.ObjectReference]*resourceCtx <span class="cov8" title="1">{
+        r.m.RLock()
+        defer r.m.RUnlock()
+
+        //fn.Logf("get: kind: %v, refs: %v\n", k, refs)
+        sdkRefs, err := getSdkRefs(k, refs)
+        if err != nil </span><span class="cov0" title="0">{
+                fn.Logf("cannot get sdkrefs :%v\n", err)
+                return map[corev1.ObjectReference]*resourceCtx{}
+        }</span>
+
+        <span class="cov8" title="1">return r.resources.get(sdkRefs)</span>
+}
+
+func (r *inv) list() [][]sdkObjectReference <span class="cov8" title="1">{
+        r.m.RLock()
+        defer r.m.RUnlock()
+
+        return r.resources.list()
+}</span>
+
+func (r *resources) list() [][]sdkObjectReference <span class="cov8" title="1">{
+        entries := [][]sdkObjectReference{}
+        for parentSdkRef, res := range r.resources </span><span class="cov8" title="1">{
+                entries = append(entries, []sdkObjectReference{parentSdkRef})
+                for sdkRef := range res.resources </span><span class="cov8" title="1">{
+                        entries = append(entries, []sdkObjectReference{parentSdkRef, sdkRef})
+                }</span>
+        }
+        <span class="cov8" title="1">return entries</span>
+}
+
+// isInitialized checks if the resources are initialized
+func (r *resources) isInitialized(sdkRef sdkObjectReference) bool <span class="cov8" title="1">{
+        if _, ok := r.resources[sdkRef]; !ok </span><span class="cov8" title="1">{
+                return false
+        }</span>
+        <span class="cov8" title="1">return true</span>
+}
+
+// init initialize the resources
+func (r *resources) init(sdkRef sdkObjectReference) <span class="cov8" title="1">{
+        r.resources[sdkRef] = &amp;resources{
+                resources: map[sdkObjectReference]*resources{},
+        }
+}</span>
+
+func getSdkRefs(k gvkKind, refs []corev1.ObjectReference) ([]sdkObjectReference, error) <span class="cov8" title="1">{
+        switch len(refs) </span>{
+        case 0:<span class="cov0" title="0">
+                return nil, fmt.Errorf("cannot walk resource tree with empty ref")</span>
+        case 1:<span class="cov8" title="1">
+                if k != forGVKKind &amp;&amp; k != watchGVKKind </span><span class="cov8" title="1">{
+                        return nil, fmt.Errorf("refs with len 1 only allowed for for/watch")
+                }</span>
+                <span class="cov8" title="1">return []sdkObjectReference{{gvkKind: k, ref: refs[0]}}, nil</span>
+        case 2:<span class="cov8" title="1">
+                if k == forGVKKind </span><span class="cov8" title="1">{
+                        return nil, fmt.Errorf("refs with len 2 only allowed for own/watch")
+                }</span>
+                <span class="cov8" title="1">return []sdkObjectReference{{gvkKind: forGVKKind, ref: refs[0]}, {gvkKind: k, ref: refs[1]}}, nil</span>
+        default:<span class="cov8" title="1">
+                return nil, fmt.Errorf("refs with len &gt; 2, got %d", len(refs))</span>
+        }
+
+}
+
+func (r *resources) set(refs []sdkObjectReference, kc *gvkKindCtx, x any, new newResource) error <span class="cov8" title="1">{
+        if len(refs) == 0 </span><span class="cov8" title="1">{
+                switch d := x.(type) </span>{
+                case *kptv1.Condition:<span class="cov8" title="1">
+                        //fn.Logf("add existing condition: %v\n", x)
+                        x := *d
+                        r.resourceCtx.existingCondition = &amp;x
+                        return nil</span>
+                case *fn.KubeObject:<span class="cov8" title="1">
+
+                        r.gvkKindCtx = *kc
+                        x := *d
+                        if new </span><span class="cov8" title="1">{
+                                //fn.Logf("add new resource: %v\n", x)
+                                r.resourceCtx.newResource = &amp;x
+                        }</span> else<span class="cov8" title="1"> {
+                                //fn.Logf("add existing resource: %v\n", x)
+                                r.resourceCtx.existingResource = &amp;x
+                        }</span>
+                        <span class="cov8" title="1">return nil</span>
+                default:<span class="cov0" title="0">
+                        return fmt.Errorf("unsupported object: %v", x)</span>
+                }
+
+        }
+        // check if resource exists
+        <span class="cov8" title="1">if !r.isInitialized(refs[0]) </span><span class="cov8" title="1">{
+                r.init(refs[0])
+        }</span>
+        <span class="cov8" title="1">return r.resources[refs[0]].set(refs[1:], kc, x, new)</span>
+}
+
+func (r *resources) delete(refs []sdkObjectReference) error <span class="cov8" title="1">{
+        if len(refs) == 0 </span><span class="cov8" title="1">{
+                r.resourceCtx.existingCondition = nil
+                return nil
+        }</span>
+        // check if resource exists
+        <span class="cov8" title="1">if !r.isInitialized(refs[0]) </span><span class="cov8" title="1">{
+                return fmt.Errorf("not found")
+        }</span>
+        <span class="cov8" title="1">return r.resources[refs[0]].delete(refs[1:])</span>
+
+}
+
+func (r *resources) get(refs []sdkObjectReference) map[corev1.ObjectReference]*resourceCtx <span class="cov8" title="1">{
+        if len(refs) == 0 </span><span class="cov8" title="1">{
+                resCtxs := map[corev1.ObjectReference]*resourceCtx{}
+                if len(r.resources) == 0 </span><span class="cov8" title="1">{
+                        // specific get
+                        resCtxs[corev1.ObjectReference{}] = r.resourceCtx.Deepcopy()
+                }</span> else<span class="cov0" title="0"> {
+                        // wildcard get
+                        for sdkRef, res := range r.resources </span><span class="cov0" title="0">{
+                                resCtxs[sdkRef.ref] = res.resourceCtx.Deepcopy()
+                        }</span>
+                }
+                <span class="cov8" title="1">return resCtxs</span>
+        }
+        // check if resource exists
+        //fn.Logf("get2 objectRef refs: %v, empty: %v\n", refs[0].ref, corev1.ObjectReference{})
+        <span class="cov8" title="1">if cmp.Equal(refs[0].ref, corev1.ObjectReference{}) </span><span class="cov8" title="1">{
+                //fn.Log("empty objectReference")
+                resCtxs := map[corev1.ObjectReference]*resourceCtx{}
+                for sdkRef, res := range r.resources </span><span class="cov8" title="1">{
+                        if sdkRef.gvkKind == refs[0].gvkKind </span><span class="cov8" title="1">{
+                                resCtxs[sdkRef.ref] = res.resourceCtx.Deepcopy()
+                        }</span>
+                }
+                <span class="cov8" title="1">return resCtxs</span>
+        }
+        <span class="cov8" title="1">if _, ok := r.resources[refs[0]]; !ok </span><span class="cov8" title="1">{
+                //fn.Log("ref not found")
+                return map[corev1.ObjectReference]*resourceCtx{}
+        }</span>
+        <span class="cov8" title="1">return r.resources[refs[0]].get(refs[1:])</span>
+}
+
+func (in *resourceCtx) Deepcopy() *resourceCtx <span class="cov8" title="1">{
+        if in == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+        <span class="cov8" title="1">out := new(resourceCtx)
+        in.DeepCopyInto(out)
+        return out</span>
+}
+
+func (in *resourceCtx) DeepCopyInto(out *resourceCtx) <span class="cov8" title="1">{
+        *out = *in
+        if in.existingCondition != nil </span><span class="cov8" title="1">{
+                in, out := &amp;in.existingCondition, &amp;out.existingCondition
+                *out = new(kptv1.Condition)
+                **out = **in
+        }</span>
+        <span class="cov8" title="1">if in.existingResource != nil </span><span class="cov8" title="1">{
+                in, out := &amp;in.existingResource, &amp;out.existingResource
+                *out = new(fn.KubeObject)
+                **out = **in
+        }</span>
+        <span class="cov8" title="1">if in.newResource != nil </span><span class="cov8" title="1">{
+                in, out := &amp;in.newResource, &amp;out.newResource
+                *out = new(fn.KubeObject)
+                **out = **in
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">/*
+Copyright 2023 The Nephio Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package condkptsdk
+
+import (
+        "fmt"
+
+        "github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+        kptfilelibv1 "github.com/nephio-project/nephio/krm-functions/lib/kptfile/v1"
+        corev1 "k8s.io/api/core/v1"
+)
+
+const SpecializerOwner = "specializer.nephio.org/owner"
+const SpecializerDelete = "specializer.nephio.org/delete"
+const SpecializerDebug = "specializer.nephio.org/debug"
+
+type KptCondSDK interface {
+        Run() (bool, error)
+}
+type ResourceKind string
+
+const (
+        // ChildRemoteCondition defines a GVK resource for which only conditions need to be created
+        ChildRemoteCondition ResourceKind = "remoteCondition"
+        // ChildRemote defines a GVK resource for which conditions and resources need to be created
+        ChildRemote ResourceKind = "remote"
+        // ChildLocal defines a GVK resource for which conditions will be created as true
+        ChildLocal ResourceKind = "local"
+        // ChildInitial defines a GVK resource which is an initial resource part fo the package and should not be deleted
+        ChildInitial ResourceKind = "initial"
+)
+
+type Config struct {
+        For                    corev1.ObjectReference
+        Owns                   map[corev1.ObjectReference]ResourceKind    // ResourceKind distinguishes different types of child resources.
+        Watch                  map[corev1.ObjectReference]WatchCallbackFn // Used for watches to non specific resources
+        PopulateOwnResourcesFn PopulateOwnResourcesFn
+        UpdateResourceFn       UpdateResourceFn
+}
+
+type PopulateOwnResourcesFn func(*fn.KubeObject) (fn.KubeObjects, error)
+
+// the list of objects contains the owns and the specific watches
+type UpdateResourceFn func(*fn.KubeObject, fn.KubeObjects) (*fn.KubeObject, error)
+
+func UpdateResourceFnNop(*fn.KubeObject, fn.KubeObjects) (*fn.KubeObject, error) <span class="cov0" title="0">{ return nil, nil }</span>
+
+type WatchCallbackFn func(*fn.KubeObject) error
+
+func New(rl *fn.ResourceList, cfg *Config) (KptCondSDK, error) <span class="cov8" title="1">{
+        inv, err := newInventory(cfg)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">r := &amp;sdk{
+                cfg:   cfg,
+                inv:   inv,
+                rl:    rl,
+                ready: true,
+        }
+        return r, nil</span>
+}
+
+type sdk struct {
+        cfg   *Config
+        inv   inventory
+        rl    *fn.ResourceList
+        kptf  kptfilelibv1.KptFile
+        ready bool // tracks the overall ready state
+        debug bool // set based on for annotation
+}
+
+func (r *sdk) Run() (bool, error) <span class="cov0" title="0">{
+        if r.rl.Items.Len() == 0 </span><span class="cov0" title="0">{
+                r.rl.Results = append(r.rl.Results, fn.GeneralResult("no resources present in the resourcelist", fn.Info))
+                return true, nil
+        }</span>
+        // get the kptfile first as we need it in various places
+        <span class="cov0" title="0">kptfile := r.rl.Items.GetRootKptfile()
+        if kptfile == nil </span><span class="cov0" title="0">{
+                fn.Log("mandatory Kptfile is missing from the package")
+                r.rl.Results.Errorf("mandatory Kptfile is missing from the package")
+                return false, fmt.Errorf("mandatory Kptfile is missing from the package")
+        }</span>
+
+        <span class="cov0" title="0">var err error
+        r.kptf, err = kptfilelibv1.New(kptfile.String())
+        if err != nil </span><span class="cov0" title="0">{
+                fn.Logf("cannot unmarshal kptfile, err: %v\n", err)
+                r.rl.Results = append(r.rl.Results, fn.ErrorResult(err))
+                return false, err
+        }</span>
+
+        // check if debug needs to be enabled.
+        // Debugging can be enabled by setting the SpecializerDebug annotation on the for resource
+        <span class="cov0" title="0">forObjs := r.rl.Items.Where(fn.IsGroupVersionKind(r.cfg.For.GroupVersionKind()))
+        for _, forObj := range forObjs </span><span class="cov0" title="0">{
+                if forObj.GetAnnotation(SpecializerDebug) != "" </span><span class="cov0" title="0">{
+                        r.debug = true
+                }</span>
+        }
+
+        // initialize inventory
+        <span class="cov0" title="0">if err := r.populateInventory(); err != nil </span><span class="cov0" title="0">{
+                return false, err
+        }</span>
+        // list the result of inventory -&gt; used for debug only
+        <span class="cov0" title="0">if r.debug </span><span class="cov0" title="0">{
+                r.listInventory()
+        }</span>
+        // call the global watches is used to inform the fn/controller
+        // of global watch data. The fn/controller can use it to parse the data
+        // and/or return an error is certain info is missing
+        <span class="cov0" title="0">r.callGlobalWatches()
+        // stage 1 of the sdk pipeline
+        // populate the child resources as if nothing existed
+        if err := r.populateChildren(); err != nil </span><span class="cov0" title="0">{
+                return false, err
+        }</span>
+        // list the result of inventory -&gt; used for debug only
+        <span class="cov0" title="0">if r.debug </span><span class="cov0" title="0">{
+                r.listInventory()
+        }</span>
+        // update the children based on the diff between existing and new resources/conditions
+        <span class="cov0" title="0">if err := r.updateChildren(); err != nil </span><span class="cov0" title="0">{
+                return false, err
+        }</span>
+        // stage 2 of the sdk pipeline
+        <span class="cov0" title="0">if err := r.updateResource(); err != nil </span><span class="cov0" title="0">{
+                return false, err
+        }</span>
+
+        <span class="cov0" title="0">return true, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">/*
+Copyright 2023 The Nephio Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package condkptsdk
+
+import "github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+
+func (r *sdk) listInventory() <span class="cov0" title="0">{
+        for _, entry := range r.inv.list() </span><span class="cov0" title="0">{
+                fn.Logf("resources entry: %v\n", entry)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">/*
+Copyright 2023 The Nephio Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package condkptsdk
+
+import (
+        "github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+        kptfilelibv1 "github.com/nephio-project/nephio/krm-functions/lib/kptfile/v1"
+        corev1 "k8s.io/api/core/v1"
+)
+
+// populateInventory populates the inventory with the conditions and resources
+// related to the config
+func (r *sdk) populateInventory() error <span class="cov0" title="0">{
+        // To make filtering easier the inventory distinguishes global resources
+        // versus specific resources associated to a forInstance (specified through the SDK Config).
+        // To perform this filtering we use the concept of the forOwnerRef, which is
+        // an ownerReference associated to the forGVK
+        // A watchedResource matching the forOwnerRef is assocatiated to the specific
+        // forInventory context. If no match was found to the forOwnerRef the watchedResource is associated
+        // to the global context
+        var forOwnerRef *corev1.ObjectReference
+
+        // We first run through the conditions to check if an ownRef is associated
+        // to the for resource objects. We call this the forOwnerRef
+        // When a forOwnerRef exists it is used to associate a watch resource to the
+        // inventory specific to the for resource or globally.
+        for _, c := range r.kptf.GetConditions() </span><span class="cov0" title="0">{
+                // get the specific inventory context from the conditionType
+                ref := kptfilelibv1.GetGVKNFromConditionType(c.Type)
+                // check if the conditionType is coming from a for KRM resource
+                kindCtx, ok := r.inv.isGVKMatch(ref)
+                if ok &amp;&amp; kindCtx.gvkKind == forGVKKind </span><span class="cov0" title="0">{
+                        // get the ownerRef from the conditionReason
+                        // to see if the forOwnerref is present and if so initialize the forOwnerRef using the GVK
+                        // information
+                        ownerRef := kptfilelibv1.GetGVKNFromConditionType(c.Reason)
+                        if err := validateGVKRef(*ownerRef); err == nil </span><span class="cov0" title="0">{
+                                forOwnerRef = &amp;corev1.ObjectReference{APIVersion: ownerRef.APIVersion, Kind: ownerRef.Kind}
+                        }</span>
+                }
+        }
+        // Now we have the forOwnerRef we run through the condition again to populate the remaining
+        // resources in the inventory
+        <span class="cov0" title="0">for _, c := range r.kptf.GetConditions() </span><span class="cov0" title="0">{
+                ref := kptfilelibv1.GetGVKNFromConditionType(c.Type)
+                ownerRef := kptfilelibv1.GetGVKNFromConditionType(c.Reason)
+                o, err := r.kptf.ParseKubeObject()
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov0" title="0">x := c
+                if err := r.populate(forOwnerRef, ref, ownerRef, &amp;x, o); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+        }
+        <span class="cov0" title="0">for _, o := range r.rl.Items </span><span class="cov0" title="0">{
+                ref := &amp;corev1.ObjectReference{APIVersion: o.GetAPIVersion(), Kind: o.GetKind(), Name: o.GetName()}
+                ownerRef := kptfilelibv1.GetGVKNFromConditionType(o.GetAnnotation(SpecializerOwner))
+                if err := r.populate(forOwnerRef, ref, ownerRef, o, o); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (r *sdk) populate(forOwnerRef, ref, ownerRef *corev1.ObjectReference, x any, o *fn.KubeObject) error <span class="cov0" title="0">{
+        // we lookup in the GVK context we initialized in the beginning to validate
+        // if the gvk is relevant for this fn/controller
+        // what the gvk Kind is about through the kindContext
+        gvkKindCtx, ok := r.inv.isGVKMatch(getGVKRefFromGVKNref(ref))
+        if !ok </span><span class="cov0" title="0">{
+                // it can be that a resource in the kpt package is not relevant for this fn/controller
+                // As such we return
+                if r.debug </span><span class="cov0" title="0">{
+                        fn.Logf("populate no match, ref: %v \n", ref)
+                }</span>
+                <span class="cov0" title="0">return nil</span>
+        }
+
+        <span class="cov0" title="0">switch gvkKindCtx.gvkKind </span>{
+        case forGVKKind:<span class="cov0" title="0">
+                if r.debug </span><span class="cov0" title="0">{
+                        fn.Logf("set existing object in inventory, kind %s, ref: %v ownerRef: %v\n", gvkKindCtx.gvkKind, ref, nil)
+                }</span>
+                <span class="cov0" title="0">if err := r.inv.set(gvkKindCtx, []corev1.ObjectReference{*ref}, x, false); err != nil </span><span class="cov0" title="0">{
+                        fn.Logf("error setting exisiting object in the inventory: %v\n", err.Error())
+                        r.rl.Results = append(r.rl.Results, fn.ErrorConfigObjectResult(err, o))
+                        return err
+                }</span>
+        case ownGVKKind:<span class="cov0" title="0">
+                ownerKindCtx, ok := r.inv.isGVKMatch(ownerRef)
+                if !ok || ownerKindCtx.gvkKind != forGVKKind </span><span class="cov0" title="0">{
+                        // this means the resource was added from a different kind
+                        // we dont need to add this to the inventory
+                        if r.debug </span><span class="cov0" title="0">{
+                                fn.Logf("populate ownkind different owner, ownerRef %v, ownKind: %v ref: %v \n", ownerRef, ownerKindCtx, ref)
+                        }</span>
+                        <span class="cov0" title="0">return nil</span>
+                }
+                <span class="cov0" title="0">if r.debug </span><span class="cov0" title="0">{
+                        fn.Logf("set existing object in inventory, kind %s, ref: %v ownerRef: %v\n", gvkKindCtx.gvkKind, ref, ownerRef)
+                }</span>
+                <span class="cov0" title="0">if err := r.inv.set(gvkKindCtx, []corev1.ObjectReference{*ownerRef, *ref}, x, false); err != nil </span><span class="cov0" title="0">{
+                        fn.Logf("error setting exisiting resource to the inventory: %v\n", err.Error())
+                        r.rl.Results = append(r.rl.Results, fn.ErrorConfigObjectResult(err, o))
+                        return err
+                }</span>
+        case watchGVKKind:<span class="cov0" title="0">
+                // check if the watch is specific or global
+                // if no forOwnerRef is set the watch is global
+                // if a forOwnerref is set we check if either the ownerRef or ref is match the GVK
+                // the specifics of the name is sorted out later
+                if forOwnerRef != nil &amp;&amp; (ownerRef.APIVersion == forOwnerRef.APIVersion &amp;&amp; ownerRef.Kind == forOwnerRef.Kind ||
+                        ref.APIVersion == forOwnerRef.APIVersion &amp;&amp; ref.Kind == forOwnerRef.Kind) </span><span class="cov0" title="0">{
+                        // this is a specific watch
+                        forRef := &amp;corev1.ObjectReference{APIVersion: r.cfg.For.APIVersion, Kind: r.cfg.For.Kind, Name: ref.Name}
+
+                        if r.debug </span><span class="cov0" title="0">{
+                                fn.Logf("set existing object in inventory, kind %s, ref: %v ownerRef: %v\n", gvkKindCtx.gvkKind, ref, ownerRef)
+                        }</span>
+                        <span class="cov0" title="0">if err := r.inv.set(gvkKindCtx, []corev1.ObjectReference{*forRef, *ref}, x, false); err != nil </span><span class="cov0" title="0">{
+                                fn.Logf("error setting exisiting resource to the inventory: %v\n", err.Error())
+                                r.rl.Results = append(r.rl.Results, fn.ErrorConfigObjectResult(err, o))
+                                return err
+                        }</span>
+                } else<span class="cov0" title="0"> {
+                        // dont add a resource to the global watch if the ownref was set, sicne this would be an intermediate
+                        // resource owned by another for. Since we aggergate the status back we dont care about this and hence
+                        // we dont add the object to the inventory
+                        if validateGVKNRef(*ownerRef) != nil </span><span class="cov0" title="0">{ // this mean onwerref is empty
+                                // this is a global watch
+                                if r.debug </span><span class="cov0" title="0">{
+                                        fn.Logf("set existing object in inventory, kind %s, ref: %v ownerRef: %v\n", gvkKindCtx.gvkKind, ref, nil)
+                                }</span>
+                                <span class="cov0" title="0">if err := r.inv.set(gvkKindCtx, []corev1.ObjectReference{*ref}, x, false); err != nil </span><span class="cov0" title="0">{
+                                        fn.Logf("error setting exisiting resource to the inventory: %v\n", err.Error())
+                                        r.rl.Results = append(r.rl.Results, fn.ErrorConfigObjectResult(err, o))
+                                        return err
+                                }</span>
+                        }
+                }
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">/*
+Copyright 2023 The Nephio Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package condkptsdk
+
+import (
+        "fmt"
+
+        "github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+        kptv1 "github.com/GoogleContainerTools/kpt/pkg/api/kptfile/v1"
+        kptfilelibv1 "github.com/nephio-project/nephio/krm-functions/lib/kptfile/v1"
+        corev1 "k8s.io/api/core/v1"
+)
+
+func (r *sdk) populateChildren() error <span class="cov0" title="0">{
+        // if no own resources exist there is not need to run this
+        if len(r.cfg.Owns) == 0 </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+        // validate if we are ready, if not we return
+        // TBD if we need to cleanup own resources
+        <span class="cov0" title="0">if !r.ready || !r.inv.isReady() </span><span class="cov0" title="0">{
+                // TBD cleanup own resources
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">if r.debug </span><span class="cov0" title="0">{
+                fn.Log("populate children: ready:", r.ready)
+        }</span>
+        <span class="cov0" title="0">for forRef, resCtx := range r.inv.get(forGVKKind, []corev1.ObjectReference{{}}) </span><span class="cov0" title="0">{
+                forObj := resCtx.existingResource
+                if r.debug </span><span class="cov0" title="0">{
+                        fn.Log("PopulateOwnResourcesFn", forObj)
+                }</span>
+                <span class="cov0" title="0">if r.cfg.PopulateOwnResourcesFn != nil &amp;&amp; forObj != nil </span><span class="cov0" title="0">{
+                        res, err := r.cfg.PopulateOwnResourcesFn(forObj)
+                        if err != nil </span><span class="cov0" title="0">{
+                                fn.Logf("error populating new resource: %v\n", err.Error())
+                                r.rl.Results = append(r.rl.Results, fn.ErrorConfigObjectResult(err, forObj))
+                                return err
+                        }</span> else<span class="cov0" title="0"> {
+                                for _, newObj := range res </span><span class="cov0" title="0">{
+                                        objRef := corev1.ObjectReference{APIVersion: newObj.GetAPIVersion(), Kind: newObj.GetKind(), Name: newObj.GetName()}
+                                        kc, ok := r.inv.isGVKMatch(&amp;objRef)
+                                        if !ok </span><span class="cov0" title="0">{
+                                                fn.Logf("populate new resource: forRef %v objRef %v cannot find resource in gvkmap\n", forRef, objRef)
+                                                return fmt.Errorf("populate new resource: forRef %v objRef %v cannot find resource in gvkmap", forRef, objRef)
+                                        }</span>
+                                        <span class="cov0" title="0">if r.debug </span><span class="cov0" title="0">{
+                                                fn.Logf("populate new resource: forRef %v objRef %v kc: %v\n", forRef, objRef, kc)
+                                        }</span>
+                                        // set owner reference on the new resource
+                                        <span class="cov0" title="0">if err := newObj.SetAnnotation(SpecializerOwner, kptfilelibv1.GetConditionType(&amp;forRef)); err != nil </span><span class="cov0" title="0">{
+                                                fn.Logf("error setting new annotation: %v\n", err.Error())
+                                                r.rl.Results = append(r.rl.Results, fn.ErrorResult(err))
+                                                return err
+                                        }</span>
+                                        // add the resource to the existing list as a new resource
+                                        <span class="cov0" title="0">if err := r.inv.set(kc, []corev1.ObjectReference{forRef, objRef}, newObj, true); err != nil </span><span class="cov0" title="0">{
+                                                fn.Logf("error setting new resource to the inventory: %v\n", err.Error())
+                                                r.rl.Results = append(r.rl.Results, fn.ErrorResult(err))
+                                                return err
+                                        }</span>
+                                }
+                        }
+                }
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+// performs the update on the children after the diff in the stage1 of the pipeline
+func (r *sdk) updateChildren() error <span class="cov0" title="0">{
+        // perform a diff to validate the existing resource against the new resources
+        diffMap, err := r.inv.diff()
+        if err != nil </span><span class="cov0" title="0">{
+                r.rl.Results = append(r.rl.Results, fn.ErrorConfigObjectResult(err, r.rl.Items.GetRootKptfile()))
+                return err
+        }</span>
+        <span class="cov0" title="0">if r.debug </span><span class="cov0" title="0">{
+                fn.Logf("diff: %v\n", diffMap)
+        }</span>
+
+        // if the fn is not ready to act we stop immediately
+        <span class="cov0" title="0">if !r.ready || !r.inv.isReady() </span><span class="cov0" title="0">{
+                for forRef, diff := range diffMap </span><span class="cov0" title="0">{
+                        // delete the overall condition for the object
+                        if diff.deleteForCondition </span><span class="cov0" title="0">{
+                                if r.debug </span><span class="cov0" title="0">{
+                                        fn.Logf("diff action -&gt; delete for condition: %s\n", kptfilelibv1.GetConditionType(&amp;forRef))
+                                }</span>
+                                <span class="cov0" title="0">if err := r.deleteConditionInKptFile(ownGVKKind, []corev1.ObjectReference{forRef}); err != nil </span><span class="cov0" title="0">{
+                                        return err
+                                }</span>
+                        }
+                        // delete all child resources by setting the annotation and set the condition to false
+                        <span class="cov0" title="0">for _, obj := range diff.deleteObjs </span><span class="cov0" title="0">{
+                                if r.debug </span><span class="cov0" title="0">{
+                                        fn.Logf("diff action -&gt;  delete set condition: %s\n", kptfilelibv1.GetConditionType(&amp;obj.ref))
+                                }</span>
+                                <span class="cov0" title="0">if err := r.handleUpdate(actionDelete, ownGVKKind, []corev1.ObjectReference{forRef, obj.ref}, obj, nil, kptv1.ConditionFalse, "not ready", true); err != nil </span><span class="cov0" title="0">{
+                                        return err
+                                }</span>
+                        }
+                }
+        } else<span class="cov0" title="0"> {
+                // act upon the diff
+                for forRef, diff := range diffMap </span><span class="cov0" title="0">{
+                        // update conditions
+                        if diff.updateForCondition </span><span class="cov0" title="0">{
+                                if r.debug </span><span class="cov0" title="0">{
+                                        fn.Logf("diff action -&gt; update for condition: %s\n", kptfilelibv1.GetConditionType(&amp;forRef))
+                                }</span>
+                                <span class="cov0" title="0">if err := r.setConditionInKptFile(actionUpdate, ownGVKKind, []corev1.ObjectReference{forRef}, nil, kptv1.ConditionFalse, "for condition"); err != nil </span><span class="cov0" title="0">{
+                                        return err
+                                }</span>
+                        }
+                        <span class="cov0" title="0">for _, obj := range diff.createConditions </span><span class="cov0" title="0">{
+                                if r.debug </span><span class="cov0" title="0">{
+                                        fn.Logf("diff action -&gt; create condition: %s\n", kptfilelibv1.GetConditionType(&amp;obj.ref))
+                                }</span>
+                                <span class="cov0" title="0">if err := r.setConditionInKptFile(actionUpdate, ownGVKKind, []corev1.ObjectReference{forRef, obj.ref}, nil, kptv1.ConditionFalse, "condition again as it was deleted"); err != nil </span><span class="cov0" title="0">{
+                                        return err
+                                }</span>
+                        }
+                        <span class="cov0" title="0">for _, obj := range diff.createInitialConditions </span><span class="cov0" title="0">{
+                                if r.debug </span><span class="cov0" title="0">{
+                                        fn.Logf("diff action -&gt; create condition: %s\n", kptfilelibv1.GetConditionType(&amp;obj.ref))
+                                }</span>
+                                <span class="cov0" title="0">if err := r.setConditionInKptFile(actionUpdate, ownGVKKind, []corev1.ObjectReference{forRef, obj.ref}, nil, kptv1.ConditionFalse, "condition for initial resource"); err != nil </span><span class="cov0" title="0">{
+                                        return err
+                                }</span>
+                        }
+                        <span class="cov0" title="0">for _, obj := range diff.createTrueConditions </span><span class="cov0" title="0">{
+                                if r.debug </span><span class="cov0" title="0">{
+                                        fn.Logf("diff action -&gt; create condition: %s\n", kptfilelibv1.GetConditionType(&amp;obj.ref))
+                                }</span>
+                                <span class="cov0" title="0">if err := r.setConditionInKptFile(actionUpdate, ownGVKKind, []corev1.ObjectReference{forRef, obj.ref}, nil, kptv1.ConditionTrue, "condition for initial resource"); err != nil </span><span class="cov0" title="0">{
+                                        return err
+                                }</span>
+                        }
+                        <span class="cov0" title="0">for _, obj := range diff.deleteConditions </span><span class="cov0" title="0">{
+                                if r.debug </span><span class="cov0" title="0">{
+                                        fn.Logf("diff action -&gt; delete condition: %s\n", kptfilelibv1.GetConditionType(&amp;obj.ref))
+                                }</span>
+                                <span class="cov0" title="0">if err := r.deleteConditionInKptFile(ownGVKKind, []corev1.ObjectReference{forRef, obj.ref}); err != nil </span><span class="cov0" title="0">{
+                                        return err
+                                }</span>
+                        }
+                        // update resources
+                        <span class="cov0" title="0">for _, obj := range diff.createObjs </span><span class="cov0" title="0">{
+                                if r.debug </span><span class="cov0" title="0">{
+                                        fn.Logf("diff action -&gt; create obj: ref: %s, ownkind: %s\n", kptfilelibv1.GetConditionType(&amp;obj.ref), obj.ownKind)
+                                }</span>
+                                <span class="cov0" title="0">if err := r.handleUpdate(actionCreate, ownGVKKind, []corev1.ObjectReference{forRef, obj.ref}, obj, nil, kptv1.ConditionFalse, "resource", false); err != nil </span><span class="cov0" title="0">{
+                                        return err
+                                }</span>
+                        }
+                        <span class="cov0" title="0">for _, obj := range diff.updateObjs </span><span class="cov0" title="0">{
+                                if r.debug </span><span class="cov0" title="0">{
+                                        fn.Logf("diff action -&gt; update obj: %s\n", kptfilelibv1.GetConditionType(&amp;obj.ref))
+                                }</span>
+                                <span class="cov0" title="0">if err := r.handleUpdate(actionUpdate, ownGVKKind, []corev1.ObjectReference{forRef, obj.ref}, obj, nil, kptv1.ConditionFalse, "resource", false); err != nil </span><span class="cov0" title="0">{
+                                        return err
+                                }</span>
+                        }
+                        <span class="cov0" title="0">for _, obj := range diff.deleteObjs </span><span class="cov0" title="0">{
+                                if r.debug </span><span class="cov0" title="0">{
+                                        fn.Logf("diff action -&gt; delete obj: %s\n", kptfilelibv1.GetConditionType(&amp;obj.ref))
+                                }</span>
+                                <span class="cov0" title="0">if err := r.handleUpdate(actionDelete, ownGVKKind, []corev1.ObjectReference{forRef, obj.ref}, obj, nil, kptv1.ConditionFalse, "resource", true); err != nil </span><span class="cov0" title="0">{
+                                        return err
+                                }</span>
+                        }
+                        // this is a corner case, in case for object gets deleted and recreated
+                        // if the delete annotation is set, we need to cleanup the
+                        // delete annotation and set the condition to update
+                        <span class="cov0" title="0">for _, obj := range diff.updateDeleteAnnotations </span><span class="cov0" title="0">{
+                                if r.debug </span><span class="cov0" title="0">{
+                                        fn.Log("diff action -&gt; update delete annotation")
+                                }</span>
+                                <span class="cov0" title="0">if err := r.handleUpdate(actionCreate, ownGVKKind, []corev1.ObjectReference{forRef, obj.ref}, obj, nil, kptv1.ConditionFalse, "resource", true); err != nil </span><span class="cov0" title="0">{
+                                        return err
+                                }</span>
+                        }
+                }
+        }
+        // update the kptfile with the latest consitions
+        <span class="cov0" title="0">return r.updateKptFile()</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">/*
+Copyright 2023 The Nephio Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package condkptsdk
+
+import (
+        "fmt"
+
+        "github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+        kptv1 "github.com/GoogleContainerTools/kpt/pkg/api/kptfile/v1"
+        corev1 "k8s.io/api/core/v1"
+)
+
+// updateResource updates or generates the resource when the status is declared ready
+// First readiness is validated in 2 steps:
+// - global readiness: when key resources are missing
+// - per instance readiness: when certain parts of an instance readiness is missing
+func (r *sdk) updateResource() error <span class="cov0" title="0">{
+        if r.debug </span><span class="cov0" title="0">{
+                fn.Logf("updateResource isReady: %t\n", r.inv.isReady())
+        }</span>
+        <span class="cov0" title="0">if !r.ready || !r.inv.isReady() </span><span class="cov0" title="0">{
+                // when the overal status is not ready delete all resources
+                // TBD if we need to check the delete annotation
+                readyMap := r.inv.getReadyMap()
+                for _, readyCtx := range readyMap </span><span class="cov0" title="0">{
+                        if readyCtx.forObj != nil </span><span class="cov0" title="0">{
+                                if len(r.cfg.Owns) == 0 </span><span class="cov0" title="0">{
+                                        r.deleteObjFromResourceList(readyCtx.forObj)
+                                }</span>
+                        }
+                }
+                <span class="cov0" title="0">return nil</span>
+        }
+        // the overall status is ready, so lets check the readiness map
+        <span class="cov0" title="0">readyMap := r.inv.getReadyMap()
+        // Since we now always start from a package that has the initial
+        // resources linked we no longer need to call the generate fn
+        /*
+                if len(readyMap) == 0 {
+                        // this is when the global resource is not found
+                        if err := r.handleGenerateUpdate(
+                                corev1.ObjectReference{APIVersion: r.cfg.For.APIVersion, Kind: r.cfg.For.Kind, Name: r.kptf.GetKptFile().Name},
+                                nil,
+                                nil,
+                                fn.KubeObjects{}); err != nil {
+                                return err
+                        }
+                }
+        */
+        for forRef, readyCtx := range readyMap </span><span class="cov0" title="0">{
+                if r.debug </span><span class="cov0" title="0">{
+                        fn.Logf("updateResource readyMap: forRef %v, readyCtx: %v\n", forRef, readyCtx)
+                }</span>
+                // if the for is not ready delete the object
+                <span class="cov0" title="0">if !readyCtx.ready </span><span class="cov0" title="0">{
+                        if readyCtx.forObj != nil </span><span class="cov0" title="0">{
+                                // TBD if this is the right approach -&gt; avoids deleting interface
+                                if len(r.cfg.Owns) == 0 </span><span class="cov0" title="0">{
+                                        r.deleteObjFromResourceList(readyCtx.forObj)
+
+                                }</span>
+                        }
+                        <span class="cov0" title="0">continue</span>
+                }
+                <span class="cov0" title="0">if r.cfg.UpdateResourceFn != nil </span><span class="cov0" title="0">{
+                        objs := fn.KubeObjects{}
+                        for _, o := range readyCtx.owns </span><span class="cov0" title="0">{
+                                x := o
+                                objs = append(objs, &amp;x)
+                        }</span>
+                        <span class="cov0" title="0">for _, o := range readyCtx.watches </span><span class="cov0" title="0">{
+                                x := o
+                                objs = append(objs, &amp;x)
+                        }</span>
+                        <span class="cov0" title="0">if err := r.handleGenerateUpdate(
+                                forRef,
+                                readyCtx.forObj,
+                                readyCtx.forCondition,
+                                objs); err != nil </span><span class="cov0" title="0">{
+                                return err
+                        }</span>
+                }
+        }
+        // update the kptfile with the latest conditions
+        <span class="cov0" title="0">return r.updateKptFile()</span>
+}
+
+// handleGenerateUpdate performs the fn/controller callback and handles the response
+// by updating the condition and resource in kptfile/resourcelist
+func (r *sdk) handleGenerateUpdate(forRef corev1.ObjectReference, forObj *fn.KubeObject, forCondition *kptv1.Condition, objs fn.KubeObjects) error <span class="cov0" title="0">{
+        newObj, err := r.cfg.UpdateResourceFn(forObj, objs)
+        if err != nil </span><span class="cov0" title="0">{
+                fn.Logf("error generating new resource: %v\n", err.Error())
+                r.rl.Results = append(r.rl.Results, fn.ErrorResult(fmt.Errorf("cannot generate resource GenerateResourceFn returned nil, for: %v", forRef)))
+                return err
+        }</span>
+        <span class="cov0" title="0">if newObj == nil </span><span class="cov0" title="0">{
+                fn.Logf("cannot generate resource GenerateResourceFn returned nil, for: %v\n", forRef)
+                r.rl.Results = append(r.rl.Results, fn.ErrorResult(fmt.Errorf("cannot generate resource GenerateResourceFn returned nil, for: %v", forRef)))
+                return fmt.Errorf("cannot generate resource GenerateResourceFn returned nil, for: %v", forRef)
+        }</span>
+        // if forCondition was set
+        <span class="cov0" title="0">if forCondition != nil </span><span class="cov0" title="0">{
+                // set annotation based on forCondition reason if present
+                if forCondition.Reason != "" </span><span class="cov0" title="0">{
+                        if err := newObj.SetAnnotation(SpecializerOwner, forCondition.Reason); err != nil </span><span class="cov0" title="0">{
+                                fn.Logf("error setting new annotation: %v\n", err.Error())
+                                r.rl.Results = append(r.rl.Results, fn.ErrorConfigObjectResult(err, newObj))
+                                return err
+                        }</span>
+                }
+        }
+        //}
+        // add the resource to the kptfile and updates the resource in the resourcelist
+
+        <span class="cov0" title="0">return r.handleUpdate(actionUpdate, forGVKKind, []corev1.ObjectReference{forRef}, object{obj: *newObj}, forCondition, kptv1.ConditionTrue, "done", true)</span>
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">/*
+Copyright 2023 The Nephio Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+package condkptsdk
+
+import (
+        "fmt"
+
+        "github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+        kptv1 "github.com/GoogleContainerTools/kpt/pkg/api/kptfile/v1"
+        kptfilelibv1 "github.com/nephio-project/nephio/krm-functions/lib/kptfile/v1"
+        corev1 "k8s.io/api/core/v1"
+)
+
+// handleUpdate sets the condition and resource based on the action
+// action: create/update/delete
+// kind: own/for/watch
+func (r *sdk) handleUpdate(a action, kind gvkKind, refs []corev1.ObjectReference, obj object, c *kptv1.Condition, status kptv1.ConditionStatus, msg string, ignoreOwnKind bool) error <span class="cov0" title="0">{
+        // set the condition
+        if err := r.setConditionInKptFile(a, kind, refs, c, status, msg); err != nil </span><span class="cov0" title="0">{
+                fn.Logf("error setting condition in kptfile: %v\n", err.Error())
+                r.rl.Results = append(r.rl.Results, fn.ErrorResult(err))
+                return err
+        }</span>
+        // update resource
+        <span class="cov0" title="0">if a == actionDelete </span><span class="cov0" title="0">{
+                if err := obj.obj.SetAnnotation(SpecializerDelete, "true"); err != nil </span><span class="cov0" title="0">{
+                        fn.Logf("error setting annotation: %v\n", err.Error())
+                        r.rl.Results = append(r.rl.Results, fn.ErrorResult(err))
+                        return err
+                }</span>
+        }
+        // set resource
+        <span class="cov0" title="0">if ignoreOwnKind </span><span class="cov0" title="0">{
+                if err := r.setObjectInResourceList(kind, refs, obj); err != nil </span><span class="cov0" title="0">{
+                        fn.Logf("error setting resource in resourceList: %v\n", err.Error())
+                        r.rl.Results = append(r.rl.Results, fn.ErrorResult(err))
+                        return err
+                }</span>
+        } else<span class="cov0" title="0"> {
+                if obj.ownKind == ChildRemote </span><span class="cov0" title="0">{
+                        if err := r.setObjectInResourceList(kind, refs, obj); err != nil </span><span class="cov0" title="0">{
+                                fn.Logf("error setting resource in resourceList: %v\n", err.Error())
+                                r.rl.Results = append(r.rl.Results, fn.ErrorResult(err))
+                                return err
+                        }</span>
+                }
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (r *sdk) deleteConditionInKptFile(kind gvkKind, refs []corev1.ObjectReference) error <span class="cov0" title="0">{
+        if !isRefsValid(refs) </span><span class="cov0" title="0">{
+                return fmt.Errorf("cannot set resource in resourcelist as the object has no valid refs: %v", refs)
+        }</span>
+        <span class="cov0" title="0">forRef := refs[0]
+        if len(refs) == 1 </span><span class="cov0" title="0">{
+                // delete condition
+                r.kptf.DeleteCondition(kptfilelibv1.GetConditionType(&amp;forRef))
+                // update the status back in the inventory
+                if err := r.inv.delete(&amp;gvkKindCtx{gvkKind: kind}, []corev1.ObjectReference{forRef}); err != nil </span><span class="cov0" title="0">{
+                        fn.Logf("error deleting stage1 resource to the inventory: %v\n", err.Error())
+                        r.rl.Results = append(r.rl.Results, fn.ErrorResult(err))
+                        return err
+                }</span>
+        } else<span class="cov0" title="0"> {
+                objRef := refs[1]
+                // delete condition
+                r.kptf.DeleteCondition(kptfilelibv1.GetConditionType(&amp;objRef))
+                // update the status back in the inventory
+                if err := r.inv.delete(&amp;gvkKindCtx{gvkKind: kind}, []corev1.ObjectReference{forRef, objRef}); err != nil </span><span class="cov0" title="0">{
+                        fn.Logf("error deleting stage1 resource to the inventory: %v\n", err.Error())
+                        r.rl.Results = append(r.rl.Results, fn.ErrorResult(err))
+                        return err
+                }</span>
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (r *sdk) setConditionInKptFile(a action, kind gvkKind, refs []corev1.ObjectReference, c *kptv1.Condition, status kptv1.ConditionStatus, msg string) error <span class="cov0" title="0">{
+        if !isRefsValid(refs) </span><span class="cov0" title="0">{
+                return fmt.Errorf("cannot set resource in resourcelist as the object has no valid refs: %v", refs)
+        }</span>
+        <span class="cov0" title="0">if c != nil </span><span class="cov0" title="0">{
+                c.Message = fmt.Sprintf("%s %s", a, msg)
+                c.Status = status
+                r.kptf.SetConditions(*c)
+                return nil
+        }</span>
+        <span class="cov0" title="0">forRef := refs[0]
+        if len(refs) == 1 </span><span class="cov0" title="0">{
+                c := kptv1.Condition{
+                        Type:    kptfilelibv1.GetConditionType(&amp;forRef),
+                        Status:  status,
+                        Message: fmt.Sprintf("%s %s", a, msg),
+                }
+                r.kptf.SetConditions(c)
+        }</span> else<span class="cov0" title="0"> {
+                objRef := refs[1]
+                c := kptv1.Condition{
+                        Type:    kptfilelibv1.GetConditionType(&amp;objRef),
+                        Status:  status,
+                        Reason:  fmt.Sprintf("%s.%s", kptfilelibv1.GetConditionType(&amp;r.cfg.For), forRef.Name),
+                        Message: fmt.Sprintf("%s %s", a, msg),
+                }
+                r.kptf.SetConditions(c)
+                // update the condition status back in the inventory
+                if err := r.inv.set(&amp;gvkKindCtx{gvkKind: kind}, []corev1.ObjectReference{forRef, objRef}, &amp;c, false); err != nil </span><span class="cov0" title="0">{
+                        fn.Logf("error updating stage1 resource to the inventory: %v\n", err.Error())
+                        r.rl.Results = append(r.rl.Results, fn.ErrorResult(err))
+                        return err
+                }</span>
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (r *sdk) setObjectInResourceList(kind gvkKind, refs []corev1.ObjectReference, obj object) error <span class="cov0" title="0">{
+        if !isRefsValid(refs) </span><span class="cov0" title="0">{
+                return fmt.Errorf("cannot set resource in resourcelist as the object has no valid refs: %v", refs)
+        }</span>
+        <span class="cov0" title="0">forRef := refs[0]
+        if len(refs) == 1 </span><span class="cov0" title="0">{
+                if err := r.rl.UpsertObjectToItems(&amp;obj.obj, nil, true); err != nil </span><span class="cov0" title="0">{
+                        fn.Logf("error updating stage1 resource to the inventory: %v\n", err.Error())
+                        r.rl.Results = append(r.rl.Results, fn.ErrorResult(err))
+                        return err
+                }</span>
+                // update the resource status back in the inventory
+                <span class="cov0" title="0">if err := r.inv.set(&amp;gvkKindCtx{gvkKind: kind}, []corev1.ObjectReference{forRef}, &amp;obj.obj, false); err != nil </span><span class="cov0" title="0">{
+                        fn.Logf("error updating stage1 resource to the inventory: %v\n", err.Error())
+                        r.rl.Results = append(r.rl.Results, fn.ErrorResult(err))
+                        return err
+                }</span>
+        } else<span class="cov0" title="0"> {
+                objRef := refs[1]
+                if err := r.rl.UpsertObjectToItems(&amp;obj.obj, nil, true); err != nil </span><span class="cov0" title="0">{
+                        fn.Logf("error updating stage1 resource: %v\n", err.Error())
+                        r.rl.Results = append(r.rl.Results, fn.ErrorResult(err))
+                        return err
+                }</span>
+                // update the resource status back in the inventory
+                <span class="cov0" title="0">if err := r.inv.set(&amp;gvkKindCtx{gvkKind: kind}, []corev1.ObjectReference{forRef, objRef}, &amp;obj.obj, false); err != nil </span><span class="cov0" title="0">{
+                        fn.Logf("error updating stage1 resource to the inventory: %v\n", err.Error())
+                        r.rl.Results = append(r.rl.Results, fn.ErrorResult(err))
+                        return err
+                }</span>
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (r *sdk) updateKptFile() error <span class="cov0" title="0">{
+        r.kptf.SortConditions()
+
+        kptfile, err := r.kptf.ParseKubeObject()
+        if err != nil </span><span class="cov0" title="0">{
+                fn.Log(err)
+                r.rl.Results = append(r.rl.Results, fn.ErrorConfigObjectResult(err, r.rl.Items.GetRootKptfile()))
+                return err
+        }</span>
+        <span class="cov0" title="0">if err := r.rl.UpsertObjectToItems(kptfile, nil, true); err != nil </span><span class="cov0" title="0">{
+                fn.Log(err)
+                r.rl.Results = append(r.rl.Results, fn.ErrorConfigObjectResult(err, r.rl.Items.GetRootKptfile()))
+                return err
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (r *sdk) deleteObjFromResourceList(obj *fn.KubeObject) <span class="cov0" title="0">{
+        for idx, o := range r.rl.Items </span><span class="cov0" title="0">{
+                if isGVKNNEqual(o, obj) </span><span class="cov0" title="0">{
+                        r.rl.Items = append(r.rl.Items[:idx], r.rl.Items[idx+1:]...)
+                }</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">/*
+Copyright 2023 The Nephio Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package condkptsdk
+
+import (
+        "github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+        corev1 "k8s.io/api/core/v1"
+)
+
+// call the global watch callbacks to provide info to the fns in a generic way
+// so they dont have to parse the complete resourcelist
+// Also it provide readiness feedback when an error is returned
+func (r *sdk) callGlobalWatches() <span class="cov0" title="0">{
+        for _, resCtx := range r.inv.get(watchGVKKind, []corev1.ObjectReference{{}}) </span><span class="cov0" title="0">{
+                if r.debug </span><span class="cov0" title="0">{
+                        fn.Logf("run watch: %v\n", resCtx.existingResource)
+                }</span>
+                <span class="cov0" title="0">if resCtx.gvkKindCtx.callbackFn != nil </span><span class="cov0" title="0">{
+                        if err := resCtx.gvkKindCtx.callbackFn(resCtx.existingResource); err != nil </span><span class="cov0" title="0">{
+                                fn.Logf("populatechildren not ready: watch callback failed: %v\n", err.Error())
+                                r.rl.Results = append(r.rl.Results, fn.ErrorConfigObjectResult(err, resCtx.existingResource))
+                                r.ready = false
+                        }</span>
+                }
+        }
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">/*
+Copyright 2023 The Nephio Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package condkptsdk
+
+import (
+        "fmt"
+
+        "github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+        corev1 "k8s.io/api/core/v1"
+)
+
+// validateGVKRef returns an error if the ApiVersion or Kind
+// contain an empty string
+func validateGVKRef(ref corev1.ObjectReference) error <span class="cov8" title="1">{
+        if ref.APIVersion == "" || ref.Kind == "" </span><span class="cov8" title="1">{
+                return fmt.Errorf("gvk not initialized, got: %v", ref)
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+
+// validateGVKNRef returns an error if the ApiVersion or Kind or Name
+// contain an empty string
+func validateGVKNRef(ref corev1.ObjectReference) error <span class="cov8" title="1">{
+        if ref.APIVersion == "" || ref.Kind == "" || ref.Name == "" </span><span class="cov8" title="1">{
+                fn.Logf("gvk or name not initialized, got: %v\n", ref)
+                return fmt.Errorf("gvk or name not initialized, got: %v", ref)
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+
+// getGVKRefFromGVKNref return a new objectReference with only APIVersion and Kind
+func getGVKRefFromGVKNref(ref *corev1.ObjectReference) *corev1.ObjectReference <span class="cov8" title="1">{
+        return &amp;corev1.ObjectReference{APIVersion: ref.APIVersion, Kind: ref.Kind}
+}</span>
+
+// isRefsValid validates if the references are initialized
+func isRefsValid(refs []corev1.ObjectReference) bool <span class="cov8" title="1">{
+        if len(refs) == 0 ||
+                (len(refs) == 1 &amp;&amp; validateGVKNRef(refs[0]) != nil) ||
+                (len(refs) == 2 &amp;&amp; (validateGVKNRef(refs[0]) != nil || validateGVKNRef(refs[1]) != nil)) ||
+                len(refs) &gt; 2 </span><span class="cov8" title="1">{
+                return false
+        }</span>
+        <span class="cov8" title="1">return true</span>
+}
+
+// isGVKNEqual validates if the APIVersion, Kind, Name and Namespace of both fn.KubeObject are equal
+func isGVKNNEqual(curobj, newobj *fn.KubeObject) bool <span class="cov8" title="1">{
+        if curobj.GetAPIVersion() == newobj.GetAPIVersion() &amp;&amp;
+                curobj.GetKind() == newobj.GetKind() &amp;&amp;
+                curobj.GetName() == newobj.GetName() &amp;&amp;
+                curobj.GetNamespace() == newobj.GetNamespace() </span><span class="cov8" title="1">{
+                return true
+        }</span>
+        <span class="cov8" title="1">return false</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">/*
+ Copyright 2023 The Nephio Authors.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
+
+package v1alpha1
+
+import (
+        "github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+        nephioreqv1alpha1 "github.com/nephio-project/api/nf_requirements/v1alpha1"
+        "github.com/nephio-project/nephio/krm-functions/lib/kubeobject"
+)
+
+type Interface struct {
+        kubeobject.KubeObjectExt[nephioreqv1alpha1.Interface]
+}
+
+// NewFromKubeObject creates a new parser interface
+// It expects a *fn.KubeObject as input representing the serialized yaml file
+func NewFromKubeObject(o *fn.KubeObject) (*Interface, error) <span class="cov0" title="0">{
+        r, err := kubeobject.NewFromKubeObject[nephioreqv1alpha1.Interface](o)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;Interface{*r}, nil</span>
+}
+
+// NewFromYAML creates a new parser interface
+// It expects a raw byte slice as input representing the serialized yaml file
+func NewFromYAML(b []byte) (*Interface, error) <span class="cov8" title="1">{
+        r, err := kubeobject.NewFromYaml[nephioreqv1alpha1.Interface](b)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return &amp;Interface{*r}, nil</span>
+}
+
+// NewFromGoStruct creates a new parser interface
+// It expects a go struct representing the interface krm resource
+func NewFromGoStruct(x *nephioreqv1alpha1.Interface) (*Interface, error) <span class="cov8" title="1">{
+        r, err := kubeobject.NewFromGoStruct(x)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return &amp;Interface{*r}, nil</span>
+}
+
+func (r *Interface) SetSpec(spec nephioreqv1alpha1.InterfaceSpec) error <span class="cov8" title="1">{
+        return r.KubeObjectExt.UnsafeSetSpec(spec)
+}</span>
+
+func (r *Interface) SetStatus(spec nephioreqv1alpha1.InterfaceStatus) error <span class="cov8" title="1">{
+        return r.KubeObjectExt.UnsafeSetStatus(spec)
+}</span>
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">/*
+ Copyright 2023 The Nephio Authors.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
+
+package v1alpha1
+
+import (
+        "github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+        "github.com/nephio-project/nephio/krm-functions/lib/kubeobject"
+        ipamv1alpha1 "github.com/nokia/k8s-ipam/apis/alloc/ipam/v1alpha1"
+)
+
+type IPAllocation struct {
+        kubeobject.KubeObjectExt[ipamv1alpha1.IPAllocation]
+}
+
+// NewFromKubeObject creates a new KubeObjectExt
+// It expects a *fn.KubeObject as input representing the serialized yaml file
+func NewFromKubeObject(o *fn.KubeObject) (*IPAllocation, error) <span class="cov0" title="0">{
+        r, err := kubeobject.NewFromKubeObject[ipamv1alpha1.IPAllocation](o)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;IPAllocation{*r}, nil</span>
+}
+
+// NewFromYAML creates a new KubeObjectExt
+// It expects a raw byte slice as input representing the serialized yaml file
+func NewFromYAML(b []byte) (*IPAllocation, error) <span class="cov8" title="1">{
+        r, err := kubeobject.NewFromYaml[ipamv1alpha1.IPAllocation](b)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return &amp;IPAllocation{*r}, nil</span>
+}
+
+// NewFromGoStruct creates a new KubeObjectExt
+// It expects a go struct representing the KRM resource
+func NewFromGoStruct(x *ipamv1alpha1.IPAllocation) (*IPAllocation, error) <span class="cov8" title="1">{
+        r, err := kubeobject.NewFromGoStruct(x)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return &amp;IPAllocation{*r}, nil</span>
+}
+
+func (r *IPAllocation) SetSpec(spec ipamv1alpha1.IPAllocationSpec) error <span class="cov8" title="1">{
+        return r.KubeObjectExt.UnsafeSetSpec(spec)
+}</span>
+
+func (r *IPAllocation) SetStatus(spec ipamv1alpha1.IPAllocationStatus) error <span class="cov8" title="1">{
+        return r.KubeObjectExt.UnsafeSetStatus(spec)
+}</span>
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">/*
+Copyright 2023 Nephio.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package v1
+
+import (
+        "fmt"
+        "strings"
+
+        corev1 "k8s.io/api/core/v1"
+        "k8s.io/apimachinery/pkg/runtime/schema"
+)
+
+// GetConditionType returns a string based on the KRM object Reference
+// It acts on APIVersion, Kind and Name. if these parameters dont exist
+// the string does not contain these parameters
+func GetConditionType(o *corev1.ObjectReference) string <span class="cov8" title="1">{
+        var sb strings.Builder
+        sb.Reset()
+        if o.APIVersion != "" </span><span class="cov8" title="1">{
+                gv, err := schema.ParseGroupVersion(o.APIVersion)
+                if err == nil </span><span class="cov8" title="1">{
+                        sb.WriteString(gv.String())
+                }</span>
+        }
+        <span class="cov8" title="1">if o.Kind != "" </span><span class="cov8" title="1">{
+                if sb.String() != "" </span><span class="cov8" title="1">{
+                        sb.WriteString(".")
+                }</span>
+                <span class="cov8" title="1">sb.WriteString(o.Kind)</span>
+        }
+        <span class="cov8" title="1">if o.Name != "" </span><span class="cov8" title="1">{
+                if sb.String() != "" </span><span class="cov8" title="1">{
+                        sb.WriteString(".")
+                }</span>
+                <span class="cov8" title="1">sb.WriteString(o.Name)</span>
+        }
+        <span class="cov8" title="1">return sb.String()</span>
+}
+
+// GetGVKNFromConditionType return a KRM ObjectReference from a string
+// It expects an APIVersion with a / as a.b/c and a kind + name
+// if not it retruns an empty ObjectReference
+func GetGVKNFromConditionType(ct string) (o *corev1.ObjectReference) <span class="cov0" title="0">{
+        split := strings.Split(ct, "/")
+        group := ""
+        vkn := ct
+        if len(split) &gt; 1 </span><span class="cov0" title="0">{
+                group = split[0]
+                vkn = split[1]
+        }</span>
+        <span class="cov0" title="0">newsplit := strings.Split(vkn, ".")
+        if len(newsplit) == 3 </span><span class="cov0" title="0">{
+                return &amp;corev1.ObjectReference{
+                        APIVersion: fmt.Sprintf("%s/%s", group, newsplit[0]),
+                        Kind:       newsplit[1],
+                        Name:       newsplit[2],
+                }
+        }</span>
+        <span class="cov0" title="0">return &amp;corev1.ObjectReference{}</span>
+}
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">/*
+Copyright 2023 Nephio.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package v1
+
+import (
+        "errors"
+        "sort"
+        "sync"
+
+        "github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+        kptv1 "github.com/GoogleContainerTools/kpt/pkg/api/kptfile/v1"
+        "sigs.k8s.io/yaml"
+)
+
+type KptFile interface {
+        // Marshal serializes the value provided into a YAML document based on "sigs.k8s.io/yaml".
+        // The structure of the generated document will reflect the structure of the value itself.
+        Marshal() ([]byte, error)
+        // ParseKubeObject returns a fn sdk KubeObject; if something failed an error
+        // is returned
+        ParseKubeObject() (*fn.KubeObject, error)
+        // GetKptFile returns the Kptfile as a go struct
+        GetKptFile() *kptv1.KptFile
+        // SetConditions sets the conditions in the kptfile. It either updates the entry if it exists
+        // or appends the entry if it does not exist.
+        SetConditions(...kptv1.Condition)
+        // DeleteCondition deletes the condition equal to the conditionType if it exists
+        DeleteCondition(ct string)
+        // GetCondition returns the condition for the given ConditionType if it exists,
+        // otherwise returns nil
+        GetCondition(ct string) *kptv1.Condition
+        // GetConditions returns all the conditions in the kptfile. if not initialized it
+        // returns an emoty slice
+        GetConditions() []kptv1.Condition
+        // Sort Conditions sorts the consition in the kptfile
+        SortConditions()
+}
+
+// New creates a new parser interface
+// It expects a raw byte slice as input representing the serialized yaml file
+func New(b string) (KptFile, error) <span class="cov8" title="1">{
+        k := &amp;kptv1.KptFile{}
+        if err := yaml.Unmarshal([]byte(b), k); err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return &amp;kptFile{
+                kptfile: k,
+        }, nil</span>
+}
+
+type kptFile struct {
+        m       sync.RWMutex
+        kptfile *kptv1.KptFile
+}
+
+// Marshal serializes the value provided into a YAML document based on "sigs.k8s.io/yaml".
+// The structure of the generated document will reflect the structure of the value itself.
+func (r *kptFile) Marshal() ([]byte, error) <span class="cov8" title="1">{
+        if r.kptfile == nil </span><span class="cov0" title="0">{
+                return nil, errors.New("cannot marshal unitialized kptfile")
+        }</span>
+        <span class="cov8" title="1">return yaml.Marshal(r.kptfile)</span>
+}
+
+// ParseKubeObject returns a fn sdk KubeObject; if something failed an error
+// is returned
+func (r *kptFile) ParseKubeObject() (*fn.KubeObject, error) <span class="cov8" title="1">{
+        r.m.RLock()
+        defer r.m.RUnlock()
+        b, err := r.Marshal()
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return fn.ParseKubeObject(b)</span>
+}
+
+// GetKptFile returns the Kptfile as a go struct
+func (r *kptFile) GetKptFile() *kptv1.KptFile <span class="cov8" title="1">{
+        return r.kptfile
+}</span>
+
+// SetConditions sets the conditions in the kptfile. It either updates the entry if it exists
+// or appends the entry if it does not exist.
+func (r *kptFile) SetConditions(c ...kptv1.Condition) <span class="cov8" title="1">{
+        r.m.Lock()
+        defer r.m.Unlock()
+        // validate is the status is set, if not initialize the condition slice
+        if r.GetKptFile().Status == nil </span><span class="cov8" title="1">{
+                r.GetKptFile().Status = &amp;kptv1.Status{
+                        Conditions: []kptv1.Condition{},
+                }
+        }</span> else<span class="cov8" title="1"> {
+                // initialize conditions if not initialized
+                if r.GetKptFile().Status.Conditions == nil </span><span class="cov0" title="0">{
+                        r.GetKptFile().Status = &amp;kptv1.Status{
+                                Conditions: []kptv1.Condition{},
+                        }
+                }</span>
+        }
+
+        // for each new condition check if the type is already in the slice
+        // if not add it, if not override it.
+        <span class="cov8" title="1">for _, new := range c </span><span class="cov8" title="1">{
+                exists := false
+                for i, existing := range r.GetKptFile().Status.Conditions </span><span class="cov8" title="1">{
+                        // if the condition exists we update the conditions in the kpt file
+                        // to the new condition
+                        if existing.Type != new.Type </span><span class="cov8" title="1">{
+                                continue</span>
+                        }
+                        <span class="cov8" title="1">r.GetKptFile().Status.Conditions[i] = new
+                        exists = true</span>
+                }
+                <span class="cov8" title="1">if !exists </span><span class="cov8" title="1">{
+                        r.GetKptFile().Status.Conditions = append(r.GetKptFile().Status.Conditions, new)
+                }</span>
+        }
+}
+
+// DeleteCondition deletes the condition equal to the conditionType if it exists
+func (r *kptFile) DeleteCondition(ct string) <span class="cov8" title="1">{
+        r.m.Lock()
+        defer r.m.Unlock()
+        if r.GetKptFile().Status == nil || len(r.GetKptFile().Status.Conditions) == 0 </span><span class="cov0" title="0">{
+                return
+        }</span>
+
+        <span class="cov8" title="1">for idx, c := range r.GetKptFile().Status.Conditions </span><span class="cov8" title="1">{
+                if c.Type == ct </span><span class="cov8" title="1">{
+                        r.GetKptFile().Status.Conditions = append(r.GetKptFile().Status.Conditions[:idx], r.GetKptFile().Status.Conditions[idx+1:]...)
+                }</span>
+        }
+}
+
+// GetCondition returns the condition for the given ConditionType if it exists,
+// otherwise returns nil
+func (r *kptFile) GetCondition(ct string) *kptv1.Condition <span class="cov8" title="1">{
+        r.m.RLock()
+        defer r.m.RUnlock()
+        if r.GetKptFile().Status == nil || len(r.GetKptFile().Status.Conditions) == 0 </span><span class="cov8" title="1">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">for _, c := range r.GetKptFile().Status.Conditions </span><span class="cov8" title="1">{
+                if c.Type == ct </span><span class="cov8" title="1">{
+                        return &amp;c
+                }</span>
+        }
+        <span class="cov8" title="1">return nil</span>
+}
+
+// GetConditions returns all the conditions in the kptfile. if not initialized it
+// returns an emoty slice
+func (r *kptFile) GetConditions() []kptv1.Condition <span class="cov8" title="1">{
+        r.m.RLock()
+        defer r.m.RUnlock()
+        if r.GetKptFile().Status == nil || len(r.GetKptFile().Status.Conditions) == 0 </span><span class="cov8" title="1">{
+                return []kptv1.Condition{}
+        }</span>
+        <span class="cov8" title="1">return r.GetKptFile().Status.Conditions</span>
+}
+
+// SortConditions returns a kptfile with sorted conditions
+func (r *kptFile) SortConditions() <span class="cov8" title="1">{
+        r.m.RLock()
+        defer r.m.RUnlock()
+
+        if r.GetKptFile().Status == nil || len(r.GetKptFile().Status.Conditions) == 0 </span><span class="cov0" title="0">{
+                return
+        }</span>
+
+        <span class="cov8" title="1">sort.SliceStable(r.GetKptFile().Status.Conditions, func(i, j int) bool </span><span class="cov8" title="1">{
+                return r.GetKptFile().Status.Conditions[i].Type &lt; r.GetKptFile().Status.Conditions[j].Type
+        }</span>)
+}
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">/*
+ Copyright 2023 The Nephio Authors.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
+
+package kptrl
+
+import (
+        "path/filepath"
+        "strings"
+
+        "github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+        "sigs.k8s.io/kustomize/kyaml/kio"
+        "sigs.k8s.io/kustomize/kyaml/kio/kioutil"
+)
+
+type ResourceList struct {
+        fn.ResourceList
+}
+
+// AddResult adds a result with error and corresponding KubeObject by
+// appending a result to the result slice in the resourceList
+func (r *ResourceList) AddResult(err error, obj *fn.KubeObject) <span class="cov8" title="1">{
+        r.Results = append(r.Results, fn.ErrorConfigObjectResult(err, obj))
+}</span>
+
+// GetResults gets the results slice from the resourceList
+func (r *ResourceList) GetResults() fn.Results <span class="cov8" title="1">{
+        return r.Results
+}</span>
+
+// GetObjects return an fn sdk KubeObject by comparing the APIVersion, Kind, Name and Namespace
+// if the object is found the corresponding obj is returned, if not nil is returned
+func (r *ResourceList) GetObjects(obj *fn.KubeObject) fn.KubeObjects <span class="cov8" title="1">{
+        return r.Items.Where(func(ko *fn.KubeObject) bool </span><span class="cov8" title="1">{ return isGVKNNEqual(ko, obj) }</span>)
+}
+
+// GetObjects returns all items from the resourceList
+func (r *ResourceList) GetAllObjects() fn.KubeObjects <span class="cov8" title="1">{
+        return r.Items
+}</span>
+
+// SetObject sets the object in the resourceList items. It either updates/overrides
+// the entry if it exists or appends the entry if it does not exist in the resourceList
+// It uses APIVersion, Kind, Name and Namespace to check the object uniqueness
+func (r *ResourceList) SetObject(obj *fn.KubeObject) error <span class="cov8" title="1">{
+        return r.UpsertObjectToItems(obj, nil, true)
+}</span>
+
+// DeleteObject deletes the object from the resourceList if it exists.
+func (r *ResourceList) DeleteObject(obj *fn.KubeObject) <span class="cov8" title="1">{
+        for idx, o := range r.Items </span><span class="cov8" title="1">{
+                if isGVKNNEqual(o, obj) </span><span class="cov8" title="1">{
+                        r.Items = append(r.Items[:idx], r.Items[idx+1:]...)
+                }</span>
+        }
+}
+
+// isGVKNEqual validates if the APIVersion, Kind, Name and Namespace of both fn.KubeObject are equal
+func isGVKNNEqual(curobj, newobj *fn.KubeObject) bool <span class="cov8" title="1">{
+        if curobj.GetAPIVersion() == newobj.GetAPIVersion() &amp;&amp;
+                curobj.GetKind() == newobj.GetKind() &amp;&amp;
+                curobj.GetName() == newobj.GetName() &amp;&amp;
+                curobj.GetNamespace() == newobj.GetNamespace() </span><span class="cov8" title="1">{
+                return true
+        }</span>
+        <span class="cov8" title="1">return false</span>
+}
+
+func includeFile(path string, match []string) bool <span class="cov8" title="1">{
+        for _, m := range match </span><span class="cov8" title="1">{
+                file := filepath.Base(path)
+                if matched, err := filepath.Match(m, file); err == nil &amp;&amp; matched </span><span class="cov8" title="1">{
+                        return true
+                }</span>
+        }
+        <span class="cov0" title="0">return false</span>
+}
+
+func GetResourceList(resources map[string]string) (*fn.ResourceList, error) <span class="cov8" title="1">{
+        inputs := []kio.Reader{}
+        for path, data := range resources </span><span class="cov8" title="1">{
+                if includeFile(path, []string{"*.yaml", "*.yml", "Kptfile"}) </span><span class="cov8" title="1">{
+                        inputs = append(inputs, &amp;kio.ByteReader{
+                                Reader: strings.NewReader(data),
+                                SetAnnotations: map[string]string{
+                                        kioutil.PathAnnotation: path,
+                                },
+                                DisableUnwrapping: true,
+                        })
+                }</span>
+        }
+        <span class="cov8" title="1">var pb kio.PackageBuffer
+        err := kio.Pipeline{
+                Inputs:  inputs,
+                Filters: []kio.Filter{},
+                Outputs: []kio.Writer{&amp;pb},
+        }.Execute()
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">rl := &amp;fn.ResourceList{
+                Items: fn.KubeObjects{},
+        }
+        for _, n := range pb.Nodes </span><span class="cov8" title="1">{
+                s, err := n.String()
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+                <span class="cov8" title="1">o, err := fn.ParseKubeObject([]byte(s))
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+                <span class="cov8" title="1">if err := rl.UpsertObjectToItems(o, nil, true); err != nil </span><span class="cov0" title="0">{
+                        panic(err)</span>
+                }
+        }
+        <span class="cov8" title="1">return rl, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">/*
+Copyright 2023 The Nephio Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package kubeobject
+
+import (
+        "bytes"
+        "fmt"
+        "io"
+        "reflect"
+
+        "github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+        "sigs.k8s.io/kustomize/kyaml/yaml"
+)
+
+// KubeObjectToStruct is a lightweight wrapper around `obj.As()`, only meant to slightly improve code readability
+func KubeObjectToStruct[T any](obj *fn.KubeObject) (*T, error) <span class="cov0" title="0">{
+        if obj == nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("cannot convert nil KubeObject")
+        }</span>
+        <span class="cov0" title="0">var x T
+        err := obj.As(&amp;x)
+        return &amp;x, err</span>
+}
+
+type KubeObjectExt[T1 any] struct {
+        fn.KubeObject
+}
+
+func (r *KubeObjectExt[T1]) GetGoStruct() (*T1, error) <span class="cov8" title="1">{
+        validateTypeOrPanic[T1]()
+        var x T1
+        err := r.KubeObject.As(&amp;x)
+        return &amp;x, err
+}</span>
+
+// NewFromKubeObject returns a KubeObjectExt struct
+// It expects a fn.KubeObject as input representing the serialized yaml file
+func NewFromKubeObject[T1 any](o *fn.KubeObject) (*KubeObjectExt[T1], error) <span class="cov8" title="1">{
+        validateTypeOrPanic[T1]()
+        if o == nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("cannot initialize with a nil object")
+        }</span>
+        <span class="cov8" title="1">return &amp;KubeObjectExt[T1]{*o}, nil</span>
+}
+
+// NewFromYaml returns a KubeObjectExt struct
+// It expects raw byte slice as input representing the serialized yaml file
+func NewFromYaml[T1 any](b []byte) (*KubeObjectExt[T1], error) <span class="cov8" title="1">{
+        validateTypeOrPanic[T1]()
+        o, err := fn.ParseKubeObject(b)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return NewFromKubeObject[T1](o)</span>
+}
+
+// NewFromGoStruct returns a KubeObjectExt struct
+// It expects a go struct representing the interface krm resource
+func NewFromGoStruct[T1 any](x *T1) (*KubeObjectExt[T1], error) <span class="cov8" title="1">{
+        validateTypeOrPanic[T1]()
+        if x == nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("cannot initialize with nil pointer")
+        }</span>
+        <span class="cov8" title="1">o, err := fn.NewFromTypedObject(x)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return NewFromKubeObject[T1](o)</span>
+}
+
+// UnsafeSetSpec sets the `spec` field of a KubeObjectExt to the value of `newSpec`,
+// while trying to keep as much formatting as possible
+func (o *KubeObjectExt[T1]) UnsafeSetSpec(newSpec interface{}) error <span class="cov0" title="0">{
+        return setNestedFieldKeepFormatting(&amp;(o.KubeObject), newSpec, "spec")
+}</span>
+
+// UnsafeSetStatus sets the `status` field of a KubeObjectExt to the value of `newStatus`,
+// while trying to keep as much formatting as possible
+func (o *KubeObjectExt[T1]) UnsafeSetStatus(newStatus interface{}) error <span class="cov0" title="0">{
+        return setNestedFieldKeepFormatting(&amp;o.KubeObject, newStatus, "status")
+}</span>
+
+// SetFromTypedObject sets the value of `o` to `value`, while keeping most of the YAML formatting.
+// It can be seen as an in-place version of fn.NewFromTypedObject
+func (o *KubeObjectExt[T1]) SetFromTypedObject(value *T1) error <span class="cov8" title="1">{
+        return setNestedFieldKeepFormatting(&amp;o.KubeObject, value)
+}</span>
+
+// SetSpec sets the `spec` field of a KubeObjectExt to the value of `newSpec`,
+// while trying to keep as much formatting as possible
+func (o *KubeObjectExt[T1]) SetSpec(value *T1) error <span class="cov8" title="1">{
+        return setNestedFieldKeepFormatting(&amp;(o.KubeObject), o.getFieldOrPanic(value, "Spec"), "spec")
+}</span>
+
+// SetStatus sets the `status` field of a KubeObjectExt to the value of `newStatus`,
+// while trying to keep as much formatting as possible
+func (o *KubeObjectExt[T1]) SetStatus(value *T1) error <span class="cov8" title="1">{
+        return setNestedFieldKeepFormatting(&amp;o.KubeObject, o.getFieldOrPanic(value, "Status"), "status")
+}</span>
+
+func (o *KubeObjectExt[T1]) SetNestedFieldKeepFormatting(value interface{}, fields ...string) error <span class="cov0" title="0">{
+        return setNestedFieldKeepFormatting(&amp;o.KubeObject, value, fields...)
+}</span>
+
+// setNestedFieldKeepFormatting is similar to KubeObject.SetNestedField(), but keeps the
+// comments and the order of fields in the YAML wherever it is possible.
+//
+// NOTE: This functionality should be solved in the upstream SDK.
+// Merging the code below to the upstream SDK is in progress and tracked in this issue:
+// https://github.com/GoogleContainerTools/kpt/issues/3923
+func setNestedFieldKeepFormatting(obj *fn.KubeObject, value interface{}, fields ...string) error <span class="cov8" title="1">{
+        oldNode := yamlNodeOf(&amp;obj.SubObject)
+        if len(fields) == 0 </span><span class="cov8" title="1">{
+                obj2, err := fn.NewFromTypedObject(value)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">*obj = *obj2</span>
+        } else<span class="cov8" title="1"> {
+                err := obj.SetNestedField(value, fields...)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+        }
+        <span class="cov8" title="1">newNode := yamlNodeOf(&amp;obj.SubObject)
+
+        deepCopyFormatting(oldNode, newNode)
+
+        return setYamlNodeOf(obj, newNode)</span>
+}
+
+///////////////// internals
+
+func (o *KubeObjectExt[T1]) getFieldOrPanic(value *T1, fieldName string) interface{} <span class="cov8" title="1">{
+        v := reflect.ValueOf(*value)
+        if v.Kind() != reflect.Struct </span><span class="cov0" title="0">{
+                panic(fmt.Sprintf("type %q is not a struct, so it doesn't have a %q field", v.Type().Name(), fieldName))</span>
+        }
+        <span class="cov8" title="1">field := v.FieldByName(fieldName)
+        if !field.IsValid() </span><span class="cov8" title="1">{
+                panic(fmt.Sprintf("type %q doesn't have a %q field", v.Type().Name(), fieldName))</span>
+        }
+        <span class="cov8" title="1">return field.Interface()</span>
+}
+
+func validateTypeOrPanic[T1 any]() <span class="cov8" title="1">{
+        var x T1
+        v := reflect.TypeOf(x)
+        if v.Kind() != reflect.Struct </span><span class="cov8" title="1">{
+                panic(fmt.Sprintf("type %q is not a struct", v.Name()))</span>
+        }
+}
+
+// shallowCopyComments copies comments from `src` to `dst` non-recursively
+func shallowCopyComments(src, dst *yaml.Node) <span class="cov8" title="1">{
+        dst.HeadComment = src.HeadComment
+        dst.LineComment = src.LineComment
+        dst.FootComment = src.FootComment
+}</span>
+
+// deepCopyFormatting copies formatting (comments and order of fields) from `src` to `dst` recursively
+func deepCopyFormatting(src, dst *yaml.Node) <span class="cov8" title="1">{
+        if src.Kind != dst.Kind </span><span class="cov0" title="0">{
+                return
+        }</span>
+
+        <span class="cov8" title="1">switch dst.Kind </span>{
+        case yaml.MappingNode:<span class="cov8" title="1">
+                copyMapFormatting(src, dst)</span>
+        case yaml.SequenceNode:<span class="cov8" title="1">
+                copyListFormatting(src, dst)</span>
+        case yaml.DocumentNode:<span class="cov0" title="0">
+                if len(src.Content) == 1 &amp;&amp; len(dst.Content) == 1 </span><span class="cov0" title="0">{
+                        shallowCopyComments(src, dst)
+                        deepCopyFormatting(src.Content[0], dst.Content[0])
+                }</span> else<span class="cov0" title="0"> {
+                        // this shouldn't really happen with YAML nodes in KubeObjects
+                        copyListFormatting(src, dst)
+                }</span>
+        default:<span class="cov8" title="1">
+                shallowCopyComments(src, dst)</span>
+        }
+}
+
+// copyMapFormatting copies formatting between MappingNodes recursively
+func copyMapFormatting(src, dst *yaml.Node) <span class="cov8" title="1">{
+        if (len(src.Content)%2 != 0) || (len(dst.Content)%2 != 0) </span><span class="cov0" title="0">{
+                panic("unexpected number of children for a YAML MappingNode")</span>
+        }
+
+        // keep comments
+        <span class="cov8" title="1">shallowCopyComments(src, dst)
+
+        // copy formatting of `src` fields to corresponding `dst` fields
+        unorderedPartOfDst := dst.Content // the slice of dst.Content that hasn't been reformatted yet
+        for i := 0; i &lt; len(src.Content); i += 2 </span><span class="cov8" title="1">{
+                key, ok := asString(src.Content[i])
+                if !ok </span><span class="cov0" title="0">{
+                        continue</span>
+                }
+                <span class="cov8" title="1">j, found := findKey(unorderedPartOfDst, key)
+                if !found </span><span class="cov8" title="1">{
+                        continue</span>
+                }
+
+                // keep ordering: swap key &amp; value to the beginning of the unordered part
+                <span class="cov8" title="1">if j != 0 </span><span class="cov8" title="1">{
+                        unorderedPartOfDst[j], unorderedPartOfDst[0] = unorderedPartOfDst[0], unorderedPartOfDst[j]
+                        unorderedPartOfDst[j+1], unorderedPartOfDst[1] = unorderedPartOfDst[1], unorderedPartOfDst[j+1]
+                }</span>
+                // keep comments
+                <span class="cov8" title="1">shallowCopyComments(src.Content[i], unorderedPartOfDst[0])
+                deepCopyFormatting(src.Content[i+1], unorderedPartOfDst[1])
+                unorderedPartOfDst = unorderedPartOfDst[2:]</span>
+        }
+}
+
+// copyListFormatting copies formatting between SequenceNodes recursively
+func copyListFormatting(src, dst *yaml.Node) <span class="cov8" title="1">{
+        // keep comments
+        shallowCopyComments(src, dst)
+
+        // copy formatting of `src` items to corresponding `dst` fields
+        for _, srcItem := range src.Content </span><span class="cov8" title="1">{
+                j, found := findMatchingItemForFormattingCopy(srcItem, dst.Content)
+                if !found </span><span class="cov8" title="1">{
+                        continue</span>
+                }
+
+                // NOTE: the order of list items isn't restored,
+                // since the change in order might be significant and deliberate
+
+                <span class="cov8" title="1">deepCopyFormatting(srcItem, dst.Content[j])</span>
+        }
+}
+
+func asString(node *yaml.Node) (string, bool) <span class="cov8" title="1">{
+        if node.Kind == yaml.ScalarNode &amp;&amp; (node.Tag == "!!str" || node.Tag == "") </span><span class="cov8" title="1">{
+                return node.Value, true
+        }</span>
+        <span class="cov0" title="0">return "", false</span>
+}
+
+// findKey finds `key` in the Content list of a YAML MappingNode passed as `mapContents`
+// Returns with the index of the key node as an int and whether the search was succesful as a bool
+func findKey(mapContents []*yaml.Node, key string) (int, bool) <span class="cov8" title="1">{
+        for i := 0; i &lt; len(mapContents); i += 2 </span><span class="cov8" title="1">{
+                keyNode := mapContents[i]
+                k, ok := asString(keyNode)
+                if ok &amp;&amp; k == key </span><span class="cov8" title="1">{
+                        return i, true
+                }</span>
+        }
+        <span class="cov8" title="1">return 0, false</span>
+}
+
+// findMatchingItemForFormattingCopy finds the node in `dstList` that matches with `srcItem` in the sense that
+// formatting should be copied from `srcItem` to the matching item in `dstList`
+// Returns with the index of the matching item as an int and whether the search was succesful as a bool
+func findMatchingItemForFormattingCopy(srcItem *yaml.Node, dstList []*yaml.Node) (int, bool) <span class="cov8" title="1">{
+        for i, dstItem := range dstList </span><span class="cov8" title="1">{
+                if shouldCopyFormatting(srcItem, dstItem) </span><span class="cov8" title="1">{
+                        return i, true
+                }</span>
+        }
+        <span class="cov8" title="1">return 0, false</span>
+}
+
+// shouldCopyFormatting retrurns whether `src` and `dst` nodes are matching in the sense that
+// formatting should be copied from `src` to `dst`
+func shouldCopyFormatting(src, dst *yaml.Node) bool <span class="cov8" title="1">{
+        if src.Kind != dst.Kind </span><span class="cov0" title="0">{
+                return false
+        }</span>
+        <span class="cov8" title="1">switch src.Kind </span>{
+        case yaml.ScalarNode:<span class="cov8" title="1">
+                return src.Value == dst.Value</span>
+        case yaml.MappingNode:<span class="cov8" title="1">
+                if (len(src.Content)%2 != 0) || (len(dst.Content)%2 != 0) </span><span class="cov0" title="0">{
+                        panic("unexpected number of children for YAML map")</span>
+                }
+                // If all `src` fields are present in `dst` with the same value, the two are considered equal
+                // In other words, adding new fields to a map isn't considered as a difference for our purposes
+                <span class="cov8" title="1">for i := 0; i &lt; len(src.Content); i += 2 </span><span class="cov8" title="1">{
+                        key, ok := asString(src.Content[i])
+                        if !ok </span><span class="cov0" title="0">{
+                                return false
+                        }</span>
+                        <span class="cov8" title="1">j, found := findKey(dst.Content, key)
+                        if !found </span><span class="cov0" title="0">{
+                                return false
+                        }</span>
+                        <span class="cov8" title="1">if !shouldCopyFormatting(src.Content[i+1], dst.Content[j+1]) </span><span class="cov8" title="1">{
+                                return false
+                        }</span>
+                }
+                <span class="cov8" title="1">return true</span>
+        case yaml.SequenceNode:<span class="cov8" title="1">
+                // Any change in embedded lists isn't considered as a difference for our purposes,
+                // or in other words: only map fields are compared recursively, but list items are ignored.
+                // In the extreme case of list of lists this can lead to inapropriate formatting,
+                // but I find this liberal approach to be more practical and efficient in real-life cases.
+                return true</span>
+        case yaml.AliasNode, yaml.DocumentNode:<span class="cov0" title="0">
+                // TODO: check AliasNode properly?
+                return true</span>
+        }
+        <span class="cov0" title="0">panic(fmt.Sprintf("unexpected YAML node type: %v", src.Kind))</span>
+}
+
+// yamlNodeOf returns with unexposed yaml.Node inside `obj` without using unsafe
+func yamlNodeOf(obj *fn.SubObject) *yaml.Node <span class="cov8" title="1">{
+        // NOTE: the round-trip YAML marshalling is only needed to get the internal YAML node from inside of `obj` without using unsafe
+        var node *yaml.Node
+        yamlBytes := []byte(obj.String())     // marshal to YAML
+        node, err := parseFirstObj(yamlBytes) // unmarshal from YAML
+        if err != nil </span><span class="cov0" title="0">{
+                panic(fmt.Sprintf("round-trip YAML serialization failed (ParseFirstObj): %v", err))</span>
+        }
+        <span class="cov8" title="1">if node.Kind == yaml.DocumentNode </span><span class="cov8" title="1">{
+                if len(node.Content) != 1 </span><span class="cov0" title="0">{
+                        panic(fmt.Sprintf("unexpected YAML DocumentNode after round-trip YAML serialization: Contents has %v items", len(node.Content)))</span>
+                }
+                <span class="cov8" title="1">node = node.Content[0]</span>
+        }
+        <span class="cov8" title="1">return node</span>
+}
+
+// setYamlNodeOf puts `newNode` inside `obj` without using unsafe
+func setYamlNodeOf(obj *fn.KubeObject, newNode *yaml.Node) error <span class="cov8" title="1">{
+        b, err := toYAML(newNode) // marshal to YAML
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("unexpected error during round-trip YAML parsing (ToYAML): %v", err)
+        }</span>
+        <span class="cov8" title="1">obj2, err := fn.ParseKubeObject(b) // unmarshal from YAML
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("unexpected error during round-trip YAML parsing (ParseKubeObject): %v", err)
+        }</span>
+        <span class="cov8" title="1">*obj = *obj2
+        return nil</span>
+}
+
+// unmarshal YAML text (bytes) to a yaml.Node
+func parseFirstObj(b []byte) (*yaml.Node, error) <span class="cov8" title="1">{
+        br := bytes.NewReader(b)
+        decoder := yaml.NewDecoder(br)
+        node := &amp;yaml.Node{}
+        if err := decoder.Decode(node); err != nil </span><span class="cov0" title="0">{
+                if err != io.EOF </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+        }
+        <span class="cov8" title="1">return node, nil</span>
+}
+
+// marshal yaml.Node to YAML text (bytes)
+func toYAML(node *yaml.Node) ([]byte, error) <span class="cov8" title="1">{
+        var w bytes.Buffer
+        encoder := yaml.NewEncoder(&amp;w)
+        if node.Kind == yaml.DocumentNode </span><span class="cov0" title="0">{
+                if len(node.Content) == 0 </span><span class="cov0" title="0">{
+                        // These cause errors when we try to write them
+                        return nil, fmt.Errorf("ToYAML: invalid DocumentNode")
+                }</span>
+        }
+        <span class="cov8" title="1">if err := encoder.Encode(node); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return w.Bytes(), nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">/*
+Copyright 2023 The Nephio Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package kubeobject
+
+import (
+        "fmt"
+        "reflect"
+
+        "github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+        "k8s.io/apimachinery/pkg/runtime"
+        "k8s.io/apimachinery/pkg/runtime/schema"
+)
+
+// TheScheme holds the mapping between Go types and schema.GroupVersionKinds.
+// Types have to be registered in it before they are used with the generic functions below.
+// The typical way of registering is by using the AddToScheme function of the package holding the API types.
+// E.g.:
+//
+//        _ = nephioreqv1alpha1.AddToScheme(kubeobject.TheScheme)
+var TheScheme *runtime.Scheme = runtime.NewScheme()
+
+// Type constraint for checking if *T implements the runtime.Object interface
+type PtrIsRuntimeObject[T any] interface {
+        runtime.Object
+        *T
+}
+
+// GetKindOrPanic returns with the Kind of a Kubernetes API resource type `T`.
+// Panics if `T` is not registered in `TheScheme`.
+func GetGVKOrPanic[T any, PT PtrIsRuntimeObject[T]]() schema.GroupVersionKind <span class="cov8" title="1">{
+        var pt PT = new(T)
+        gvks, _, err := TheScheme.ObjectKinds(pt)
+        if err != nil || len(gvks) == 0 </span><span class="cov0" title="0">{
+                panic(err)</span>
+        }
+        <span class="cov8" title="1">return gvks[0]</span>
+}
+
+// FilterByType returns the objects in `objs` whose Group-Version-Kind matches with the Go type `T`.
+// Panics if `T` is not registered in `TheScheme`.
+// FilterByType returns with
+//   - the list of matching KubeObjects coneverted to `*T`.
+//   - the rest of the `objs` list (KubeObjects that don't match)
+//   - a potential error
+func FilterByType[T any, PT PtrIsRuntimeObject[T]](objs fn.KubeObjects) ([]*T, fn.KubeObjects, error) <span class="cov8" title="1">{
+        result := make([]*T, 0, len(objs))
+        var rest fn.KubeObjects
+        for _, o := range objs </span><span class="cov8" title="1">{
+                if o.GroupVersionKind() == GetGVKOrPanic[T, PT]() </span><span class="cov8" title="1">{
+                        var x T
+                        err := o.As(&amp;x)
+                        if err != nil </span><span class="cov0" title="0">{
+                                return nil, nil, err
+                        }</span>
+                        <span class="cov8" title="1">result = append(result, &amp;x)</span>
+                } else<span class="cov8" title="1"> {
+                        rest = append(rest, o)
+                }</span>
+        }
+        <span class="cov8" title="1">return result, rest, nil</span>
+}
+
+// GetSingleton returns with the one-and-only resource in `objs` whose Go type is `T`, or an error
+// if there is not exactly 1 instance of type `T` is present in `objs`.
+// Panics if `T` is not registered in `TheScheme`.
+func GetSingleton[T any, PT PtrIsRuntimeObject[T]](objs fn.KubeObjects) (*T, error) <span class="cov8" title="1">{
+        typedObjs, _, err := FilterByType[T, PT](objs)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">if len(typedObjs) != 1 </span><span class="cov8" title="1">{
+                var x T
+                return nil, fmt.Errorf("expected exactly 1 instance of %v in the kpt package, but got %v", reflect.TypeOf(x).Name(), len(typedObjs))
+        }</span>
+        <span class="cov8" title="1">return typedObjs[0], nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">/*
+Copyright 2023 Nephio.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package v1
+
+import (
+        "encoding/json"
+        "fmt"
+        "github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+        nadv1 "github.com/k8snetworkplumbingwg/network-attachment-definition-client/pkg/apis/k8s.cni.cncf.io/v1"
+        "github.com/nephio-project/nephio/krm-functions/lib/kubeobject"
+)
+
+const (
+        CniVersion    = "0.3.1"
+        ModeBridge    = "bridge"
+        ModeL2        = "l2"
+        StaticNadType = "static"
+        TuningType    = "tuning"
+)
+
+var (
+        ConfigType = []string{"spec", "config"}
+)
+
+type NadConfig struct {
+        CniVersion string          `json:"cniVersion,omitempty"`
+        Vlan       int             `json:"vlan,omitempty"`
+        Plugins    []PluginCniType `json:"plugins,omitempty"`
+}
+
+type PluginCniType struct {
+        Type         string       `json:"type,omitempty"`
+        Capabilities Capabilities `json:"capabilities,omitempty"`
+        Master       string       `json:"master,omitempty"`
+        Mode         string       `json:"mode,omitempty"`
+        Ipam         Ipam         `json:"ipam,omitempty"`
+}
+
+type Capabilities struct {
+        Ips bool `json:"ips,omitempty"`
+        Mac bool `json:"mac,omitempty"`
+}
+
+type Ipam struct {
+        Type      string      `json:"type,omitempty"`
+        Addresses []Addresses `json:"addresses,omitempty"`
+}
+
+type Addresses struct {
+        Address string `json:"address,omitempty"`
+        Gateway string `json:"gateway,omitempty"`
+}
+
+type CniSpecType int64
+
+const (
+        OtherType CniSpecType = iota // 0
+        VlanAllocOnly
+        IpVlanType
+        SriovType
+        MacVlanType
+)
+
+type NadStruct struct {
+        K           kubeobject.KubeObjectExt[nadv1.NetworkAttachmentDefinition]
+        CniSpecType CniSpecType
+}
+
+// NewFromKubeObject creates a new parser interface
+// It expects a *fn.KubeObject as input representing the serialized yaml file
+func NewFromKubeObject(b *fn.KubeObject) (*NadStruct, error) <span class="cov8" title="1">{
+        p, err := kubeobject.NewFromKubeObject[nadv1.NetworkAttachmentDefinition](b)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return &amp;NadStruct{K: *p}, nil</span>
+}
+
+// NewFromYAML creates a new parser interface
+// It expects a raw byte slice as input representing the serialized yaml file
+func NewFromYAML(b []byte) (*NadStruct, error) <span class="cov8" title="1">{
+        p, err := kubeobject.NewFromYaml[nadv1.NetworkAttachmentDefinition](b)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return &amp;NadStruct{K: *p}, nil</span>
+}
+
+// NewFromGoStruct creates a new parser interface
+// It expects a go struct representing the interface krm resource
+func NewFromGoStruct(b *nadv1.NetworkAttachmentDefinition) (*NadStruct, error) <span class="cov8" title="1">{
+        p, err := kubeobject.NewFromGoStruct(b)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return &amp;NadStruct{K: *p}, nil</span>
+}
+
+func (r *NadStruct) getNadConfig() (NadConfig, error) <span class="cov8" title="1">{
+        nadConfigStruct := NadConfig{}
+        configSpec := r.GetConfigSpec()
+        if configSpec == "" </span><span class="cov8" title="1">{
+                configSpec = "{}"
+        }</span>
+        <span class="cov8" title="1">if err := json.Unmarshal([]byte(configSpec), &amp;nadConfigStruct); err != nil </span><span class="cov0" title="0">{
+                return nadConfigStruct, fmt.Errorf("invalid NAD Config, %s", err)
+        }</span>
+        <span class="cov8" title="1">nadConfigStruct.CniVersion = CniVersion
+        switch cniSpecType := r.CniSpecType; cniSpecType </span>{
+        case VlanAllocOnly:<span class="cov0" title="0">
+                return nadConfigStruct, nil</span>
+        case IpVlanType:<span class="cov8" title="1">
+                if nadConfigStruct.Plugins == nil || len(nadConfigStruct.Plugins) == 0 </span><span class="cov8" title="1">{
+                        nadConfigStruct.Plugins = []PluginCniType{
+                                {
+                                        Capabilities: Capabilities{
+                                                Ips: true,
+                                        },
+                                        Mode: ModeL2,
+                                        Ipam: Ipam{
+                                                Type: StaticNadType,
+                                                Addresses: []Addresses{
+                                                        {},
+                                                },
+                                        },
+                                },
+                        }
+                }</span>
+                <span class="cov8" title="1">return nadConfigStruct, nil</span>
+        case MacVlanType:<span class="cov8" title="1">
+                if nadConfigStruct.Plugins == nil || len(nadConfigStruct.Plugins) == 0 </span><span class="cov8" title="1">{
+                        nadConfigStruct.Plugins = []PluginCniType{
+                                {
+                                        Capabilities: Capabilities{Ips: true},
+                                        Mode:         ModeBridge,
+                                        Ipam: Ipam{
+                                                Type: StaticNadType,
+                                                Addresses: []Addresses{
+                                                        {},
+                                                },
+                                        },
+                                },
+                                {
+                                        Capabilities: Capabilities{
+                                                Mac: true,
+                                        },
+                                        Type: TuningType,
+                                },
+                        }
+                }</span>
+                <span class="cov8" title="1">return nadConfigStruct, nil</span>
+        case SriovType:<span class="cov8" title="1">
+                if nadConfigStruct.Plugins == nil || len(nadConfigStruct.Plugins) == 0 </span><span class="cov8" title="1">{
+                        nadConfigStruct.Plugins = []PluginCniType{
+                                {
+                                        Capabilities: Capabilities{
+                                                Ips: true,
+                                        },
+                                        Mode: ModeBridge,
+                                        Ipam: Ipam{
+                                                Type: StaticNadType,
+                                                Addresses: []Addresses{
+                                                        {},
+                                                },
+                                        },
+                                },
+                        }
+                }</span>
+                <span class="cov8" title="1">return nadConfigStruct, nil</span>
+        case OtherType:<span class="cov8" title="1">
+                if nadConfigStruct.Plugins == nil || len(nadConfigStruct.Plugins) == 0 </span><span class="cov8" title="1">{
+                        nadConfigStruct.Plugins = []PluginCniType{
+                                {
+                                        Capabilities: Capabilities{
+                                                Ips: true,
+                                        },
+                                        Mode: ModeBridge,
+                                        Ipam: Ipam{
+                                                Type: StaticNadType,
+                                                Addresses: []Addresses{
+                                                        {},
+                                                },
+                                        },
+                                },
+                        }
+                }</span>
+                <span class="cov8" title="1">return nadConfigStruct, nil</span>
+        }
+        <span class="cov0" title="0">return nadConfigStruct, nil</span>
+}
+
+func (r *NadStruct) setNadConfig(config NadConfig) error <span class="cov8" title="1">{
+        b, err := json.Marshal(config)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">return r.K.SetNestedString(string(b), ConfigType...)</span>
+}
+
+func (r *NadStruct) getStringValue(fields ...string) string <span class="cov8" title="1">{
+        s, ok, err := r.K.NestedString(fields...)
+        if err != nil </span><span class="cov0" title="0">{
+                return ""
+        }</span>
+        <span class="cov8" title="1">if !ok </span><span class="cov8" title="1">{
+                return ""
+        }</span>
+        <span class="cov8" title="1">return s</span>
+}
+
+func (r *NadStruct) GetConfigSpec() string <span class="cov8" title="1">{
+        return r.getStringValue(ConfigType...)
+}</span>
+
+func (r *NadStruct) GetCNIType() (string, error) <span class="cov8" title="1">{
+        existingNadConfig, err := r.getNadConfig()
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+        <span class="cov8" title="1">for _, plugin := range existingNadConfig.Plugins </span><span class="cov8" title="1">{
+                if plugin.Type == TuningType </span><span class="cov0" title="0">{
+                        continue</span>
+                } else<span class="cov8" title="1"> {
+                        return plugin.Type, nil
+                }</span>
+        }
+        <span class="cov0" title="0">return "", nil</span>
+}
+
+func (r *NadStruct) GetVlan() (int, error) <span class="cov8" title="1">{
+        existingNadConfig, err := r.getNadConfig()
+        if err != nil </span><span class="cov0" title="0">{
+                return 0, err
+        }</span>
+        <span class="cov8" title="1">return existingNadConfig.Vlan, nil</span>
+}
+
+func (r *NadStruct) GetNadMaster() (string, error) <span class="cov8" title="1">{
+        existingNadConfig, err := r.getNadConfig()
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+        <span class="cov8" title="1">for _, plugin := range existingNadConfig.Plugins </span><span class="cov8" title="1">{
+                if plugin.Type == TuningType </span><span class="cov0" title="0">{
+                        continue</span>
+                } else<span class="cov8" title="1"> {
+                        return plugin.Master, nil
+                }</span>
+        }
+        <span class="cov0" title="0">return "", nil</span>
+}
+
+func (r *NadStruct) GetIpamAddress() ([]Addresses, error) <span class="cov8" title="1">{
+        existingNadConfig, err := r.getNadConfig()
+        if err != nil </span><span class="cov0" title="0">{
+                return []Addresses{}, err
+        }</span>
+        <span class="cov8" title="1">for _, plugin := range existingNadConfig.Plugins </span><span class="cov8" title="1">{
+                if plugin.Type == TuningType </span><span class="cov0" title="0">{
+                        continue</span>
+                } else<span class="cov8" title="1"> {
+                        return plugin.Ipam.Addresses, nil
+                }</span>
+        }
+        <span class="cov0" title="0">return []Addresses{}, nil</span>
+}
+
+// SetConfigSpec sets the spec attributes in the kubeobject according the go struct
+func (r *NadStruct) SetConfigSpec(spec *nadv1.NetworkAttachmentDefinitionSpec) error <span class="cov8" title="1">{
+        return r.K.SetNestedString(spec.Config, ConfigType...)
+}</span>
+
+func (r *NadStruct) SetCNIType(cniType string) error <span class="cov8" title="1">{
+        switch cniSpecType := cniType; cniSpecType </span>{
+        case "":<span class="cov8" title="1">
+                return fmt.Errorf("unknown cniType")</span>
+        case "ipvlan":<span class="cov8" title="1">
+                r.CniSpecType = IpVlanType</span>
+        case "macvlan":<span class="cov8" title="1">
+                r.CniSpecType = MacVlanType</span>
+        case "sriov":<span class="cov8" title="1">
+                r.CniSpecType = SriovType</span>
+        }
+        <span class="cov8" title="1">nadConfigStruct, err := r.getNadConfig()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">for i, plugin := range nadConfigStruct.Plugins </span><span class="cov8" title="1">{
+                if plugin.Type == TuningType </span><span class="cov8" title="1">{
+                        continue</span>
+                } else<span class="cov8" title="1"> {
+                        nadConfigStruct.Plugins[i].Type = cniType
+                }</span>
+        }
+        <span class="cov8" title="1">return r.setNadConfig(nadConfigStruct)</span>
+}
+
+func (r *NadStruct) SetVlan(vlanType int) error <span class="cov8" title="1">{
+        if vlanType == 0 </span><span class="cov8" title="1">{
+                return fmt.Errorf("unknown vlanType")
+        }</span> else<span class="cov8" title="1"> {
+                nadConfigStruct, err := r.getNadConfig()
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">nadConfigStruct.Vlan = vlanType
+                return r.setNadConfig(nadConfigStruct)</span>
+        }
+}
+
+func (r *NadStruct) SetNadMaster(nadMaster string) error <span class="cov8" title="1">{
+        if nadMaster == "" </span><span class="cov8" title="1">{
+                return fmt.Errorf("unknown nad master interface")
+        }</span> else<span class="cov8" title="1"> {
+                nadConfigStruct, err := r.getNadConfig()
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">for i, plugin := range nadConfigStruct.Plugins </span><span class="cov8" title="1">{
+                        if plugin.Type == TuningType </span><span class="cov0" title="0">{
+                                continue</span>
+                        } else<span class="cov8" title="1"> {
+                                nadConfigStruct.Plugins[i].Master = nadMaster
+                        }</span>
+                }
+                <span class="cov8" title="1">return r.setNadConfig(nadConfigStruct)</span>
+        }
+}
+
+func (r *NadStruct) SetIpamAddress(ipam []Addresses) error <span class="cov8" title="1">{
+        if ipam == nil </span><span class="cov8" title="1">{
+                return fmt.Errorf("unknown IPAM address")
+        }</span> else<span class="cov8" title="1"> {
+                nadConfigStruct, err := r.getNadConfig()
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">for i, plugin := range nadConfigStruct.Plugins </span><span class="cov8" title="1">{
+                        if plugin.Type == TuningType </span><span class="cov0" title="0">{
+                                continue</span>
+                        } else<span class="cov8" title="1"> {
+                                nadConfigStruct.Plugins[i].Ipam.Addresses = ipam
+                        }</span>
+                }
+                <span class="cov8" title="1">return r.setNadConfig(nadConfigStruct)</span>
+        }
+}
+
+func (n *NadConfig) String() (string, error) <span class="cov8" title="1">{
+        b, err := json.Marshal(n)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", fmt.Errorf("to string conversion error: %s", err)
+        }</span>
+        <span class="cov8" title="1">return string(b), nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">/*
+ Copyright 2023 The Nephio Authors.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
+
+package v1alpha1
+
+import (
+        "github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+        "github.com/nephio-project/nephio/krm-functions/lib/kubeobject"
+        vlanv1alpha1 "github.com/nokia/k8s-ipam/apis/alloc/vlan/v1alpha1"
+)
+
+type VLANAllocation struct {
+        kubeobject.KubeObjectExt[vlanv1alpha1.VLANAllocation]
+}
+
+// NewFromKubeObject creates a new KubeObjectExt
+// It expects a *fn.KubeObject as input representing the serialized yaml file
+func NewFromKubeObject(o *fn.KubeObject) (*VLANAllocation, error) <span class="cov0" title="0">{
+        r, err := kubeobject.NewFromKubeObject[vlanv1alpha1.VLANAllocation](o)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;VLANAllocation{*r}, nil</span>
+}
+
+// NewFromYAML creates a new KubeObjectExt
+// It expects a raw byte slice as input representing the serialized yaml file
+func NewFromYAML(b []byte) (*VLANAllocation, error) <span class="cov8" title="1">{
+        r, err := kubeobject.NewFromYaml[vlanv1alpha1.VLANAllocation](b)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return &amp;VLANAllocation{*r}, nil</span>
+}
+
+// NewFromGoStruct creates a new KubeObjectExt
+// It expects a go struct representing the KRM resource
+func NewFromGoStruct(x *vlanv1alpha1.VLANAllocation) (*VLANAllocation, error) <span class="cov8" title="1">{
+        r, err := kubeobject.NewFromGoStruct(x)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return &amp;VLANAllocation{*r}, nil</span>
+}
+
+func (r *VLANAllocation) SetSpec(spec vlanv1alpha1.VLANAllocationSpec) error <span class="cov8" title="1">{
+        return r.KubeObjectExt.UnsafeSetSpec(spec)
+}</span>
+
+func (r *VLANAllocation) SetStatus(spec vlanv1alpha1.VLANAllocationStatus) error <span class="cov8" title="1">{
+        return r.KubeObjectExt.UnsafeSetStatus(spec)
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

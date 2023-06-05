@@ -1,0 +1,3 @@
+github.com/nephio-project/nephio/krm-functions/vlan-fn/fn/function.go:35:	Run				60.0%
+github.com/nephio-project/nephio/krm-functions/vlan-fn/fn/function.go:56:	updateVLANAllocationResource	76.5%
+total:										(statements)			72.7%

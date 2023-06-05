@@ -1,0 +1,10 @@
+mode: set
+github.com/nephio-project/nephio/krm-functions/nfdeploy-fn/amfdeployfn/main.go:27.45,29.2 1 1
+github.com/nephio-project/nephio/krm-functions/nfdeploy-fn/amfdeployfn/main.go:31.13,34.42 2 0
+github.com/nephio-project/nephio/krm-functions/nfdeploy-fn/amfdeployfn/main.go:34.42,36.3 1 0
+github.com/nephio-project/nephio/krm-functions/nfdeploy-fn/smfdeployfn/main.go:27.45,29.2 1 1
+github.com/nephio-project/nephio/krm-functions/nfdeploy-fn/smfdeployfn/main.go:31.13,34.42 2 0
+github.com/nephio-project/nephio/krm-functions/nfdeploy-fn/smfdeployfn/main.go:34.42,36.3 1 0
+github.com/nephio-project/nephio/krm-functions/nfdeploy-fn/upfdeployfn/main.go:26.45,28.2 1 1
+github.com/nephio-project/nephio/krm-functions/nfdeploy-fn/upfdeployfn/main.go:30.13,33.42 2 0
+github.com/nephio-project/nephio/krm-functions/nfdeploy-fn/upfdeployfn/main.go:33.42,35.3 1 0
